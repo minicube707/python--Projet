@@ -2,6 +2,7 @@ import pygame
 import random
 import numpy as np
 import time
+import os
 
 pygame.init()
 
@@ -28,7 +29,9 @@ PURPLE = [255, 0, 255]
 
 ORANGE = [255, 165, 0]
 
-music = pygame.mixer.music.load("Desktop\Document\Programmation\Python\Jeu\Others\Tetris\Tetris_song.mp3")
+module_dir = os.path.dirname(__file__)
+os.chdir(module_dir)
+music = pygame.mixer.music.load("Tetris_song.mp3")
 
 def end_game(all_figure):
     end = False

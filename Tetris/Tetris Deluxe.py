@@ -5,7 +5,8 @@ import time
 import pickle
 import os
 
-os.chdir("Desktop\Document\Programme\Python\Jeu\Others\Tetris")
+module_dir = os.path.dirname(__file__)
+os.chdir(module_dir)
 pygame.init()
 
 # Crée une fenêtre de 800x600 pixels

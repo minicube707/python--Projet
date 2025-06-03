@@ -1,9 +1,9 @@
 
-
 import pygame
 import random
 import numpy as np
 import time
+import os
 
 pygame.init()
 
@@ -34,7 +34,9 @@ SHADOW = [50, 50, 50]
 
 
 #Import the music
-music = pygame.mixer.music.load("Desktop\Document\Programmation\Python\Jeu\Others\Tetris\Tetris_song.mp3")
+module_dir = os.path.dirname(__file__)
+os.chdir(module_dir)
+music = pygame.mixer.music.load("Tetris_song.mp3")
 
 #Return true if a figure is in pos 0 height
 def end_game(all_figure):

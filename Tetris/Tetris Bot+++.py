@@ -3,12 +3,14 @@ import pygame
 import random
 import numpy as np
 import time
+import os
+
 
 pygame.init()
 
 # Crée une fenêtre de 800x600 pixels
-WIDTH, HEIGHT = 1910, 1000
-WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+WIDTH, HEIGHT = 1550, 800
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Définit le titre de la fenêtre
 pygame.display.set_caption("Basic pygame")
@@ -33,7 +35,9 @@ SHADOW = [50, 50, 50]
 
 
 #Import the music
-music = pygame.mixer.music.load("Desktop\Document\Programmation\Python\Jeu\Others\Tetris\Tetris_song.mp3")
+module_dir = os.path.dirname(__file__)
+os.chdir(module_dir)
+music = pygame.mixer.music.load("Tetris_song.mp3")
 
 #Return true if a figure is in pos 0 height
 def end_game(all_figure):
