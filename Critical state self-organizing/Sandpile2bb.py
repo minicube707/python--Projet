@@ -1,8 +1,5 @@
 import numpy as np
 import pygame
-import matplotlib.pyplot as plt
-import time
-from collections import deque
 
 WIDTH = 800
 WIN = pygame.display.set_mode((WIDTH, WIDTH))
