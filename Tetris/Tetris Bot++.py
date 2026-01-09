@@ -594,8 +594,6 @@ def update_score(score, level, nb_line, tt_nb_line):
 
 def make_score(test_figure, test_grid, rows, cols):
     
-    malus = 0
-
     #Add the figure
     for test_bloc in test_figure:
         test_grid[test_bloc[1], test_bloc[0]] = 1
@@ -1045,7 +1043,7 @@ while run:
             next_figure, next_colour, next_num, list_num, next_nb_state = add_figure(list_num)
 
             best_state, best_delta_x = find_position(grid, rows, cols, next_figure, figure, next_num, num, nb_state, next_nb_state)
-            print(grid)
+            #print(grid)
             
             #Reset the time for delay of keys
             start = time.time()

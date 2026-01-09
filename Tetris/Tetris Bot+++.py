@@ -595,8 +595,6 @@ def update_score(score, level, nb_line, tt_nb_line):
 
 def make_score(list_coo, grid, rows, cols):
     
-    malus = 0
-
     #verify if there is a line in game
     for i in range(rows):
             

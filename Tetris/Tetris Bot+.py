@@ -609,7 +609,7 @@ def make_score(test_figure, test_grid, rows, cols):
                         test_grid[row +1 , col] = 1
                         test_grid[row, col] = 0
 
-
+    #Malus if an empty cell is surrounded by fill cell
     for x in range(cols-3):
         for y in range(rows-3):
             if np.array_equal(test_grid[y:y+3, x:x+3], np.array([[1, 1, 1], [1, 0, 1], [1, 1, 1]])):
