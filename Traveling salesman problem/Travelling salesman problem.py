@@ -59,11 +59,11 @@ def solve_tsp(list_point, order_point, distance, path, start_point, previous_poi
 
 
 WIDTH, HEIGHT = 300, 300
-number_point = int(input("How many point do you wand "))
+number_point = int(input("How many point do you want ?\n"))
 while number_point <= 2:
     print("")
     print("Enter a number greater than 2")
-    number_point = int(input("How many point do you wand "))
+    number_point = int(input("\nHow many point do you want ?\n"))
     
 X = np.random.randint(0, WIDTH, number_point)
 Y = np.random.randint(0, WIDTH, number_point)
