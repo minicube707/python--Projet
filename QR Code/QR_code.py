@@ -8,264 +8,6 @@ os.chdir(module_dir)
 #Expand the limits before add \n for the numpy matrix
 np.set_printoptions(linewidth=150)
 
-log_table = np.array([
-        [  1,   0],
-        [  2,   0],
-        [  4,   1],
-        [  8,  25],
-        [ 16,   2],
-        [ 32,  50],
-        [ 64,  26],
-        [128, 198],
-        [ 29,   3],
-        [ 58, 223],
-        [116,  51],
-        [232, 238],
-        [205,  27],
-        [135, 104],
-        [ 19, 199],
-        [ 38,  75],
-        [ 76,   4],
-        [152, 100],
-        [ 45, 224],
-        [ 90,  14],
-        [180,  52],
-        [117, 141],
-        [234, 239],
-        [201, 129],
-        [143,  28],
-        [  3, 193],
-        [  6, 105],
-        [ 12, 248],
-        [ 24, 200],
-        [ 48,   8],
-        [ 96,  76],
-        [192, 113],
-        [157,   5],
-        [ 39, 138],
-        [ 78, 101],
-        [156,  47],
-        [ 37, 225],
-        [ 74,  36],
-        [148,  15],
-        [ 53,  33],
-        [106,  53],
-        [212, 147],
-        [181, 142],
-        [119, 218],
-        [238, 240],
-        [193,  18],
-        [159, 130],
-        [ 35,  69],
-        [ 70,  29],
-        [140, 181],
-        [  5, 194],
-        [ 10, 125],
-        [ 20, 106],
-        [ 40,  39],
-        [ 80, 249],
-        [160, 185],
-        [ 93, 201],
-        [186, 154],
-        [105,   9],
-        [210, 120],
-        [185,  77],
-        [111, 228],
-        [222, 114],
-        [161, 166],
-        [ 95,   6],
-        [190, 191],
-        [ 97, 139],
-        [194,  98],
-        [153, 102],
-        [ 47, 221],
-        [ 94,  48],
-        [188, 253],
-        [101, 226],
-        [202, 152],
-        [137,  37],
-        [ 15, 179],
-        [ 30,  16],
-        [ 60, 145],
-        [120,  34],
-        [240, 136],
-        [253,  54],
-        [231, 208],
-        [211, 148],
-        [187, 206],
-        [107, 143],
-        [214, 150],
-        [177, 219],
-        [127, 189],
-        [254, 241],
-        [225, 210],
-        [223,  19],
-        [163,  92],
-        [ 91, 131],
-        [182,  56],
-        [113,  70],
-        [226,  64],
-        [217,  30],
-        [175,  66],
-        [ 67, 182],
-        [134, 163],
-        [ 17, 195],
-        [ 34,  72],
-        [ 68, 126],
-        [136, 110],
-        [ 13, 107],
-        [ 26,  58],
-        [ 52,  40],
-        [104,  84],
-        [208, 250],
-        [189, 133],
-        [103, 186],
-        [206,  61],
-        [129, 202],
-        [ 31,  94],
-        [ 62, 155],
-        [124, 159],
-        [248,  10],
-        [237,  21],
-        [199, 121],
-        [147,  43],
-        [ 59,  78],
-        [118, 212],
-        [236, 229],
-        [197, 172],
-        [151, 115],
-        [ 51, 243],
-        [102, 167],
-        [204,  87],
-        [133,   7],
-        [ 23, 112],
-        [ 46, 192],
-        [ 92, 247],
-        [184, 140],
-        [109, 128],
-        [218,  99],
-        [169,  13],
-        [ 79, 103],
-        [158,  74],
-        [ 33, 222],
-        [ 66, 237],
-        [132,  49],
-        [ 21, 197],
-        [ 42, 254],
-        [ 84,  24],
-        [168, 227],
-        [ 77, 165],
-        [154, 153],
-        [ 41, 119],
-        [ 82,  38],
-        [164, 184],
-        [ 85, 180],
-        [170, 124],
-        [ 73,  17],
-        [146,  68],
-        [ 57, 146],
-        [114, 217],
-        [228,  35],
-        [213,  32],
-        [183, 137],
-        [115,  46],
-        [230,  55],
-        [209,  63],
-        [191, 209],
-        [ 99,  91],
-        [198, 149],
-        [145, 188],
-        [ 63, 207],
-        [126, 205],
-        [252, 144],
-        [229, 135],
-        [215, 151],
-        [179, 178],
-        [123, 220],
-        [246, 252],
-        [241, 190],
-        [255,  97],
-        [227, 242],
-        [219,  86],
-        [171, 211],
-        [ 75, 171],
-        [150,  20],
-        [ 49,  42],
-        [ 98,  93],
-        [196, 158],
-        [149, 132],
-        [ 55,  60],
-        [110,  57],
-        [220,  83],
-        [165,  71],
-        [ 87, 109],
-        [174,  65],
-        [ 65, 162],
-        [130,  31],
-        [ 25,  45],
-        [ 50,  67],
-        [100, 216],
-        [200, 183],
-        [141, 123],
-        [  7, 164],
-        [ 14, 118],
-        [ 28, 196],
-        [ 56,  23],
-        [112,  73],
-        [224, 236],
-        [221, 127],
-        [167,  12],
-        [ 83, 111],
-        [166, 246],
-        [ 81, 108],
-        [162, 161],
-        [ 89,  59],
-        [178,  82],
-        [121,  41],
-        [242, 157],
-        [249,  85],
-        [239, 170],
-        [195, 251],
-        [155,  96],
-        [ 43, 134],
-        [ 86, 177],
-        [172, 187],
-        [ 69, 204],
-        [138,  62],
-        [  9,  90],
-        [ 18, 203],
-        [ 36,  89],
-        [ 72,  95],
-        [144, 176],
-        [ 61, 156],
-        [122, 169],
-        [244, 160],
-        [245,  81],
-        [247,  11],
-        [243, 245],
-        [251,  22],
-        [235, 235],
-        [203, 122],
-        [139, 117],
-        [ 11,  44],
-        [ 22, 215],
-        [ 44,  79],
-        [ 88, 174],
-        [176, 213],
-        [125, 233],
-        [250, 230],
-        [233, 231],
-        [207, 173],
-        [131, 232],
-        [ 27, 116],
-        [ 54, 214],
-        [108, 244],
-        [216, 234],
-        [173, 168],
-        [ 71,  80],
-        [142,  88],
-        [  1, 175]])
-
 def create_finder_patern():
 
     ##Create a grid a 7*7 full of 1
@@ -479,7 +221,7 @@ def manage_data():
 
     #data = input("Write something: ")
     #data = "HELLO WORLD"
-    data = "AB"
+    data = "BONJOUR"
     print("DATA ", data)
 
     len_data = len(data)
@@ -584,7 +326,7 @@ def multiply_polynomials(poly_1, poly_2, log_table):
             num = (expo_1 + expo_2) % 255
 
             #Then Xor the log of the addition
-            res_poly[i+j] ^= int(log_table[int(num)][0])
+            res_poly[i+j] ^= int(log_table[num][0])
 
     #Retrun the exponent for each coef of the polynome
     res_poly = log_table[res_poly][:, 1]
@@ -605,14 +347,19 @@ def generate_poly(nb_correction, log_table):
 
 def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
 
+    #Multiply the generator polynome by the first term of the data polynome
     gene_poly_exp += data_poly_exp[0]
+
+    #Apply modulo to stay in Galois Field (256)
     gene_poly_exp %= 255
 
     #Convert generator poly to log 
     gene_poly_log = log_table[gene_poly_exp][:, 0]
 
-    #Convert generator poly to log 
-    data_poly_log = log_table[data_poly_exp][:, 0]
+    #Convert data poly to log
+    #EXEPT for the log (0) stay 0
+    #In tab log, log(0) == -1
+    data_poly_log = np.where(data_poly_exp == -1, 0, log_table[data_poly_exp][:, 0])
 
     #Fill with zeros to fit the size 
     if (len(data_poly_log) > len(gene_poly_log)):
@@ -621,8 +368,6 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
         data_poly_log = np.append(data_poly_log, np.zeros(len(gene_poly_log) - len(data_poly_log), dtype=int))
     
     # Apply the condition: if gene_poly_log == 0, then take data_poly_log, otherwise perform an XOR
-    print("Gen ", gene_poly_log)
-    print("Dat ", data_poly_log)
     gene_poly_log ^= data_poly_log
     
     #Pop the first element of the generator poly
@@ -635,34 +380,26 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
 
 def manage_error_correction(bit_message):
     
-    #log_table = np.load("log_table.npy")
-    
+    log_table = np.load("log_table.npy")
+
     ecc_block_size = 10
     #The division has been performed 16 times, which is the number of terms in the message polynomial
     tt_num_codeword = 16
 
+    #Encryption Reed Solomon
     gene_poly_exp = generate_poly(ecc_block_size, log_table)
     data_poly_log = np.array([int(octet, 2) for octet in bit_message])
     data_poly_exp = log_table[data_poly_log][:, 1]
     
-    
-    print("Len data ", len(data_poly_exp))
-    print("Len gene ", len(gene_poly_exp))
-    print("data ", data_poly_log)
-    print("gene ", gene_poly_exp)
-    print("")
-    
     res = data_poly_exp
     for i in range(tt_num_codeword):
         res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
-        print("res ", res)
-
 
     #Error Correction Code in log
     ecc = log_table[res][:, 0]
 
     #print(ecc)
-    print("ECC ", [hex(octet) for octet in ecc])
+    #print("ECC ", [hex(octet) for octet in ecc])
 
 
 def main():
