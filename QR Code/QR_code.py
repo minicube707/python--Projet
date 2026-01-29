@@ -8,7 +8,13 @@ os.chdir(module_dir)
 #Expand the limits before add \n for the numpy matrix
 np.set_printoptions(linewidth=150)
 
-def create_finder_patern():
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                     MAKE PATTERN                        │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
+def create_finder_pattern():
 
     ##Create a grid a 7*7 full of 1
     patern = np.ones((7, 7), dtype=int)
@@ -23,13 +29,19 @@ def create_finder_patern():
     patern[2, 2:5] = 0
     patern[3, 2:5] = 0
     patern[4, 2:5] = 0
-
+    
     return patern
 
-def add_finder_parten(grid):
+def add_finder_partten(grid):
 
-    patern  = create_finder_patern()
+    patern  = create_finder_pattern()
 
+    #Init pattern then add finding pattern. It stay only the place for Format Information 
+    grid[0:9, 0:9] = 1
+    grid[0:9, -8:] = 1
+    grid[-8:, 0:9] = 1
+
+    #Add Finding Pattern
     grid[0:7, 0:7] = patern
     grid[0:7, -7:] = patern
     grid[-7:, 0:7] = patern
@@ -39,10 +51,24 @@ def add_finder_parten(grid):
 def add_timing_partern(grid):
 
     n = grid[8:-8, 6].shape[0]
-    grid[8:-8, 6] = np.arange(n) % 2
-    grid[6, 8:-8] = np.arange(n) % 2
+    grid[8:-8, 6] = 1 - np.arange(n) % 2
+    grid[6, 8:-8] = 1 - np.arange(n) % 2
 
     return grid
+
+def add_pattern(grid):
+
+    grid = add_finder_partten(grid)
+    grid = add_timing_partern(grid)
+
+    return (grid)
+
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                     WRITE DATA                          │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
 
 def write_pair_data(grid, data1, data2, index_x, index_y):
     
@@ -89,11 +115,11 @@ def write_data_first(grid, data):
     #Write the data to the one third right part of the QR Code
     while (start_x > len_grid - 6):
 
-        grid, nb_line = write_up_data(grid, data, start_x, len_grid, nb_line_tt * 2, 8)
+        grid, nb_line = write_up_data(grid, data, start_x, len_grid, nb_line_tt * 2, 9)
         nb_line_tt += nb_line
         start_x -= 2
 
-        grid, nb_line = write_down_data(grid, data, start_x, 8, nb_line_tt * 2, len_grid)
+        grid, nb_line = write_down_data(grid, data, start_x, 9, nb_line_tt * 2, len_grid)
         nb_line_tt += nb_line
         start_x -= 2
 
@@ -153,7 +179,15 @@ def write_data(grid, data):
     grid, nb_line_tt, start_x = write_data_second(grid, data, start_x, nb_line_tt)
     grid = write_data_last(grid, data, start_x, nb_line_tt)
 
-    return (grid)
+    #Flip bit plt.imshow(grid, cmap='gray')
+    flip_grid = 1 - grid
+    return (flip_grid)
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │          DATA ANALYSIS & DATA ENCODING                  │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
 
 def num_encode(data):
 
@@ -307,9 +341,15 @@ def add_correction(bit_message):
 
     #Check the sequence of data codeword bytes in octect and hexadecimal
     #print([int(octet, 2) for octet in bytes_numbers])
-    print([hex(int(octet, 2)) for octet in bytes_numbers])
+    #print([hex(int(octet, 2)) for octet in bytes_numbers])
 
     return bytes_numbers
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                ERROR CODE CORRECTOR                     │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
 
 #Multiply 2 polynome in Galois 256 field, the input are the exponent and the output is the exponent
 def multiply_polynomials(poly_1, poly_2, log_table):
@@ -401,27 +441,192 @@ def manage_error_correction(bit_message):
     #print(ecc)
     #print("ECC ", [hex(octet) for octet in ecc])
 
+    bit_message.extend(format(x, "08b") for x in ecc)
+
+    return (bit_message)
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                    DATA MASKING                         │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# >>>        MASK          >>>
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+#(row + column) mod 2 == 0
+def apply_mask_1(grid):
+
+    # Create index i, j
+    i, j = np.indices(grid.shape)
+
+    # Mask where (i+j) % 2 == 0
+    mask = (i + j) % 2 == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+#(row) mod 2 == 0
+def apply_mask_2(grid):
+
+    # Create index i, j
+    i, _ = np.indices(grid.shape)
+
+    # Mask where i % 2 == 0
+    mask = i  % 2 == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+#(column) mod 3 == 0
+def apply_mask_3(grid):
+
+    # Create index i, j
+    _, j = np.indices(grid.shape)
+
+    # Mask where i % 3 == 0
+    mask = j  % 3 == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+#(row + column) mod 3 == 0
+def apply_mask_4(grid):
+
+    # Create index i, j
+    i, j = np.indices(grid.shape)
+
+    # Mask where (i+j) % 3 == 0
+    mask = (i + j) % 3 == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+#( floor(row / 2) + floor(column / 3) ) mod 2 == 0
+def apply_mask_5(grid):
+
+    # Create index i, j
+    i, j = np.indices(grid.shape)
+
+    # Mask where (i // 2 + j // 3) % 2 == 0
+    mask = (i // 2 + j // 3) % 2 == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+#((row * column) mod 2) + ((row * column) mod 3) == 0
+def apply_mask_6(grid):
+
+
+    # Create index i, j
+    i, j = np.indices(grid.shape)
+
+    # Mask where ((i * j) % 2 + (i * j) % 3 ) == 0
+    mask = ((i * j) % 2 + (i * j) % 3 ) == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+#( ((row * column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
+def apply_mask_7(grid):
+
+
+    # Create index i, j
+    i, j = np.indices(grid.shape)
+
+    # Mask where (((i * j) % 2 + (i * j) % 3 ) % 2) == 0
+    mask = ((i * j) % 2 + (i * j) % 3 ) % 2 == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+#( ((row + column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
+def apply_mask_8(grid):
+
+
+    # Create index i, j
+    i, j = np.indices(grid.shape)
+
+    # Mask where (((i + j) % 2 + (i * j) % 3 ) % 2) == 0
+    mask = ((i + j) % 2 + (i * j) % 3 ) % 2 == 0
+
+    # Flip bits where mask is true
+    grid[mask] = 1 - grid[mask]
+
+    #Add pattern
+    grid = add_pattern(grid)
+
+    return grid
+
+def data_masking(grid):
+
+    grid = apply_mask_8(grid)
+    
+    return grid
+
 
 def main():
 
-    #Create a grid a 21*21 full of 1
-    grid = np.ones((21, 21))
-
-    grid = add_finder_parten(grid)
-    grid = add_timing_partern(grid)
-
-    data = np.arange((216))
+    #Create a grid a 21*21 full of 0
+    grid = np.zeros((21, 21))
+    grid = add_pattern(grid)
 
     bit_message, bit_count = manage_data()
     bit_message = add_terminaison(bit_message)
     bit_message = add_correction(bit_message)
-    manage_error_correction(bit_message)
+    bit_message = manage_error_correction(bit_message)
 
     #print(bit_message)
-    write_data(grid, data)
+    #print([hex(int(b, 2)) for b in bit_message])
+
+    #Convertion list string to list numpy
+    list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
     
-    #plt.figure()
-    #plt.imshow(grid, cmap='gray')
-    #plt.show()
+    grid = write_data(grid, list_numpy)
+
+    grid = np.ones((21, 21))
+    grid = data_masking(grid)
+
+    print(grid)
+
+    plt.figure()
+    plt.imshow(grid, cmap='gray')
+    plt.show()
 
 main()
