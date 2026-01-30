@@ -10,6 +10,17 @@ os.chdir(module_dir)
 #Expand the limits before add \n for the numpy matrix
 np.set_printoptions(linewidth=150)
 
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# >>>        UTILS         >>>
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+def print_bit(res):
+    
+    for i in range(len(res)):
+        print(res[i], end="")
+    print("")
+
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
 # │                     MAKE PATTERN                        │
@@ -65,7 +76,6 @@ def add_pattern(grid):
 
     return (grid)
 
-
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
 # │                    FORMAT STRING                        │
@@ -116,7 +126,7 @@ def put_format_string(grid, format_string):
 
     #Bottom Left Corner
     grid[-7:, 8] = format_string[:7][::-1]
-
+    
     #Black point
     grid[-8, 8] = 1
 
@@ -405,6 +415,7 @@ def manage_data():
     #Numeric
     if all(digit in list(numeric) for digit in list(data)):
 
+        print("mode: numeric")
         bit_count = format(len_data, "010b")
         bit_message = num_encode(data)
         mode = "numeric"
@@ -415,6 +426,7 @@ def manage_data():
     #Alphanumeric
     elif all(char in list(alphanumeric) for char in list(data)):
 
+        print("mode: alphanumeric")
         bit_count = format(len_data, "09b")
         bit_message = alpha_encode(data)
         mode = "alphanumeric"
@@ -424,6 +436,7 @@ def manage_data():
 
     #Bit
     else:
+        print("mode: bit")
         bit_count = format(len_data, "08b")
         bit_message = bit_encode(data)  
         mode = "byte"
@@ -471,6 +484,10 @@ def add_correction(bit_message):
 
     # Split into bytes
     bytes_numbers = [bitstream[i:i+8] for i in range(0, len(bitstream), 8)]
+
+    #Check the sequence of data codeword bytes in octect and hexadecimal
+    #print([int(octet, 2) for octet in bytes_numbers])
+    #print([hex(int(octet, 2)) for octet in bytes_numbers])
 
     return bytes_numbers
 
@@ -563,6 +580,9 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
 
     #Error Correction Code in log
     ecc = log_table[res][:, 0]
+
+    #print(ecc)
+    #print("ECC ", [hex(octet) for octet in ecc])
 
     bit_message.extend(format(x, "08b") for x in ecc)
 
@@ -876,10 +896,14 @@ def main():
     bit_message = add_correction(bit_message)
     bit_message = manage_error_correction(bit_message, tt_num_codeword, ecc_block_size)
 
+    #print(bit_message)
+    #print([hex(int(b, 2)) for b in bit_message])
+
     #Convertion list string to list numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
     
     grid = write_data(list_numpy)
+
     grid = data_masking(grid, ecc_level)
 
     plt.figure()
