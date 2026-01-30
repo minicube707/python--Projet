@@ -1,12 +1,25 @@
 import numpy as np
+from numpy.lib.stride_tricks import sliding_window_view
 import matplotlib.pyplot as plt
 import os 
+import json
 
 module_dir = os.path.dirname(__file__)
 os.chdir(module_dir)
 
 #Expand the limits before add \n for the numpy matrix
 np.set_printoptions(linewidth=150)
+
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# >>>        UTILS         >>>
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+def print_bit(res):
+    
+    for i in range(len(res)):
+        print(res[i], end="")
+    print("")
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -51,8 +64,8 @@ def add_finder_partten(grid):
 def add_timing_partern(grid):
 
     n = grid[8:-8, 6].shape[0]
-    grid[8:-8, 6] = 1 - np.arange(n) % 2
-    grid[6, 8:-8] = 1 - np.arange(n) % 2
+    grid[8:-8, 6] = np.arange(n) % 2
+    grid[6, 8:-8] = np.arange(n) % 2
 
     return grid
 
@@ -63,6 +76,106 @@ def add_pattern(grid):
 
     return (grid)
 
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                    FORMAT STRING                        │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
+def remove_left_zeros(lst):
+    i = 0
+    while i < len(lst) and lst[i] == 0:
+        i += 1
+    return lst[i:]
+
+def calcul_error_correction_bit(data_poly):
+
+    #Generator Polynomial
+    gene_poly = np.array([1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1], dtype=int)
+
+    #Generate Error Correction
+    data_poly = np.append(data_poly, np.zeros(10)).astype(dtype=int)
+
+    #Remove Any 0s from the Left Side
+    data_poly = remove_left_zeros(data_poly)
+    
+    while(len(data_poly) > 10):
+
+        #Pad the Generator Polynomial string on the right with 0s to make it the same length as the current format string:
+        pad_gen_poly = np.append(gene_poly, np.zeros(len(data_poly) - len(gene_poly))).astype(dtype=int)
+
+        #XOR the padded generator polynomial string with the current format string.
+        data_poly ^= pad_gen_poly
+
+        #Remove any 0s from the Left Side
+        data_poly = remove_left_zeros(data_poly)
+
+    #If the result were smaller than 10 bits, we would pad it on the LEFT with 0s to make it 10 bits long.
+    if (data_poly.size < 10):
+        data_poly = np.append(np.zeros(10 - data_poly.size, dtype=int), data_poly)
+
+    return (data_poly)
+
+def put_format_string(grid, format_string):
+
+    #Top Left Corner
+    grid[8, 0:6] = 1 - format_string[0:6]
+    grid[8, 7:9] = 1 - format_string[6:8]
+    grid[7, 8] = 1 - format_string[8]
+    grid[:6, 8] = 1 - format_string[9:][::-1]
+
+    #Bottom Left Corner
+    grid[-7:, 8] = 1 - format_string[:7][::-1]
+    grid[-8, 8] = 0
+
+    #Top Right Corner
+    grid[8, -8:] = 1 - format_string[7:]
+
+    return grid
+
+def add_format_string(grid, num_mask, ecc_level):
+
+    list_format_string = []
+
+    #Add Error Correction Bits
+    #L
+    if (ecc_level == "L"):
+        list_format_string.append("01")
+
+    #M
+    elif (ecc_level == "M"):
+        list_format_string.append("00")
+    
+    #Q
+    elif (ecc_level == "Q"):
+        list_format_string.append("11")
+
+    #H
+    else:
+        list_format_string.append("10")
+
+    #Add Number Mask Pattern
+    list_format_string.append(format(num_mask, "03b"))
+
+    #Convertion list string to list numpy
+    data_poly = np.array([int(bit) for byte in list_format_string for bit in byte], dtype=np.uint8)
+
+    ecc_format_bit = calcul_error_correction_bit(data_poly)
+
+    #Put the Format and Error Correction Bits Together
+    format_string = np.append(data_poly, ecc_format_bit)
+
+    # Mask String
+    CONST_MASK_STRING = np.array([1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0])
+
+    #XOR with the Mask String
+    final_format_string = format_string ^ CONST_MASK_STRING
+
+    #Put format string on QR CODE
+    grid = put_format_string(grid, final_format_string)
+
+    return grid
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -254,8 +367,8 @@ def manage_data():
     alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 
     #data = input("Write something: ")
-    #data = "HELLO WORLD"
-    data = "BONJOUR"
+    data = "HELLO WORLD"
+    #data = "BONJOUR"
     print("DATA ", data)
 
     len_data = len(data)
@@ -295,14 +408,13 @@ def manage_data():
 
     return bit_message, bit_count
 
-def add_terminaison(bit_message):
+def add_terminaison(bit_message, ecc_level):
 
-    #=> ADD check Error Correction Code Words and Block Information <=
-    #Error Correction level set as Medium 2
-    error_correction_level = 2
-    tt_num_codeword = 16
+    with open("qr_rs_structure_v1.json", "r") as f:
+        rs = json.load(f)
+    
+    tt_num_codeword = rs["error_correction"][ecc_level]["total_data_codewords"]
     tt_num_codeword_bit = tt_num_codeword * 8
-    error_correction_codewords_per_block = 10
 
     #Add Terminator
     len_bit_message = sum(len(elem) for elem in bit_message)
@@ -418,19 +530,22 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
 
     return (gene_poly_exp)
 
-def manage_error_correction(bit_message):
+def manage_error_correction(bit_message, ecc_level):
     
     log_table = np.load("log_table.npy")
 
-    ecc_block_size = 10
-    #The division has been performed 16 times, which is the number of terms in the message polynomial
-    tt_num_codeword = 16
+    with open("qr_rs_structure_v1.json", "r") as f:
+        rs = json.load(f)
+    
+    tt_num_codeword = rs["error_correction"][ecc_level]["total_data_codewords"]
+    ecc_block_size = rs["error_correction"][ecc_level]["ec_codewords_per_block"]
 
     #Encryption Reed Solomon
     gene_poly_exp = generate_poly(ecc_block_size, log_table)
     data_poly_log = np.array([int(octet, 2) for octet in bit_message])
     data_poly_exp = log_table[data_poly_log][:, 1]
-    
+
+    #The division has been performed 16 times, which is the number of terms in the message polynomial
     res = data_poly_exp
     for i in range(tt_num_codeword):
         res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
@@ -444,6 +559,120 @@ def manage_error_correction(bit_message):
     bit_message.extend(format(x, "08b") for x in ecc)
 
     return (bit_message)
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                    PENALTY PATTERNS                     │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
+def penalty_run(line):
+    penalty = 0
+    current = line[0]
+    length = 1
+
+    for v in line[1:]:
+        if v == current:
+            length += 1
+        else:
+            if length >= 5:
+                penalty += 3 + (length - 5)
+            current = v
+            length = 1
+
+    #Last run
+    if length >= 5:
+        penalty += 3 + (length - 5)
+
+    return penalty
+
+def penalty_1(grid):
+    penalty = 0
+
+    #Horizontal
+    for row in grid:
+        penalty += penalty_run(row)
+
+    #Vertical
+    for col in grid.T:
+        penalty += penalty_run(col)
+
+    return penalty
+
+def penalty_2(grid):
+
+    #Window slice 2*2
+    blocks = sliding_window_view(grid, (2, 2))
+
+    #Test bloc all 0 or all 1
+    zeros = np.all(blocks == 0, axis=(2, 3))
+    ones  = np.all(blocks == 1, axis=(2, 3))
+
+    return np.sum(zeros | ones) * 3
+
+def penalty_3(grid):
+
+    count = 0
+
+    PATTERN = np.array([1,0,1,1,1,0,1])
+    WHITE_4 = np.array([0,0,0,0])
+
+    #Horizontal
+    for row in grid:
+        windows = sliding_window_view(row, 11)
+        for w in windows:
+            if (np.array_equal(w[:7], PATTERN) and np.array_equal(w[7:], WHITE_4)) or \
+               (np.array_equal(w[:4], WHITE_4) and np.array_equal(w[4:], PATTERN)):
+                count += 1
+
+    #Vertical
+    for col in grid.T:
+        windows = sliding_window_view(col, 11)
+        for w in windows:
+            if (np.array_equal(w[:7], PATTERN) and np.array_equal(w[7:], WHITE_4)) or \
+               (np.array_equal(w[:4], WHITE_4) and np.array_equal(w[4:], PATTERN)):
+                count += 1
+
+    return count * 40
+
+def penalty_4(grid):
+
+    #Count how many dark modules there are in the matrix
+    nb_dark = np.count_nonzero(grid == 0)
+
+    #Calculate the percent of modules in the matrix that are dark: (darkmodules / totalmodules) * 100
+    pourcent_dark = nb_dark / grid.size * 100
+
+    #Determine the previous and next multiple of five of this percent
+    previous_m5 = (pourcent_dark // 5) * 5
+    next_m5 = previous_m5 + 5
+
+    #Subtract 50 from each of these multiples of five and take the absolute value of the result
+    abs_p = abs(50 - previous_m5)
+    abs_n = abs(50 - next_m5)
+    
+    #Divide each of these by five
+    p = abs_p // 5
+    n = abs_n // 5
+
+    #Finally, take the smallest of the two numbers and multiply it by 10
+    penalty = min(p, n) * 10
+
+    return penalty
+
+def calcul_penalty(grid):
+
+    penalty = penalty_1(grid)
+    penalty += penalty_2(grid)
+    penalty += penalty_3(grid)
+    penalty += penalty_4(grid)
+
+    print("")
+    print(penalty_1(grid))
+    print(penalty_2(grid))
+    print(penalty_3(grid))
+    print(penalty_4(grid))
+    print(penalty)
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -479,7 +708,7 @@ def apply_mask_2(grid):
     i, _ = np.indices(grid.shape)
 
     # Mask where i % 2 == 0
-    mask = i  % 2 == 0
+    mask = i % 2 == 0
 
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
@@ -594,12 +823,30 @@ def apply_mask_8(grid):
 
     return grid
 
-def data_masking(grid):
+def data_masking(grid, ecc_level):
 
-    grid = apply_mask_8(grid)
+    list_mask_function = [apply_mask_1, apply_mask_2, apply_mask_3, apply_mask_4, apply_mask_5, apply_mask_6, apply_mask_7, apply_mask_8]
     
-    return grid
 
+    for i, f in enumerate(list_mask_function):
+        cp_grid = f(grid.copy())
+        cp_grid = add_pattern(cp_grid)
+        cp_grid = add_format_string(cp_grid, i, ecc_level)
+
+        calcul_penalty(cp_grid)
+
+        plt.figure()
+        plt.imshow(cp_grid, cmap='gray')
+        plt.show()
+
+    return 1 - grid
+
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                          MAIN                           │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
 
 def main():
 
@@ -607,10 +854,13 @@ def main():
     grid = np.zeros((21, 21))
     grid = add_pattern(grid)
 
+    #Level
+    ecc_level = "Q"
+
     bit_message, bit_count = manage_data()
-    bit_message = add_terminaison(bit_message)
+    bit_message = add_terminaison(bit_message, ecc_level)
     bit_message = add_correction(bit_message)
-    bit_message = manage_error_correction(bit_message)
+    bit_message = manage_error_correction(bit_message, ecc_level)
 
     #print(bit_message)
     #print([hex(int(b, 2)) for b in bit_message])
@@ -620,10 +870,7 @@ def main():
     
     grid = write_data(grid, list_numpy)
 
-    grid = np.ones((21, 21))
-    grid = data_masking(grid)
-
-    print(grid)
+    grid = data_masking(grid, ecc_level)
 
     plt.figure()
     plt.imshow(grid, cmap='gray')
