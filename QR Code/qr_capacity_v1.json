@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "capacities": {
+    "L": {
+      "numeric": 41,
+      "alphanumeric": 25,
+      "byte": 17,
+      "kanji": 10
+    },
+    "M": {
+      "numeric": 34,
+      "alphanumeric": 20,
+      "byte": 14,
+      "kanji": 8
+    },
+    "Q": {
+      "numeric": 27,
+      "alphanumeric": 16,
+      "byte": 11,
+      "kanji": 7
+    },
+    "H": {
+      "numeric": 17,
+      "alphanumeric": 10,
+      "byte": 7,
+      "kanji": 4
+    }
+  }
+}
