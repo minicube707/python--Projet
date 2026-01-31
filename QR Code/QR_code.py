@@ -518,8 +518,10 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
     #Apply modulo to stay in Galois Field (256)
     gene_poly_exp %= 255
 
-    #Convert generator poly to log 
-    gene_poly_log = log_table[gene_poly_exp][:, 0]
+    #Convert generator poly to log
+    #EXEPT for the log (0) stay 0
+    #In tab log, log(0) == -1
+    gene_poly_log = np.where(gene_poly_exp == -1, 0, log_table[gene_poly_exp][:, 0])
 
     #Convert data poly to log
     #EXEPT for the log (0) stay 0
@@ -557,8 +559,10 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
     for i in range(tt_num_codeword):
         res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
 
-    #Error Correction Code in log
-    ecc = log_table[res][:, 0]
+    #Convert Error Correction Code to log
+    #EXEPT for the log (0) stay 0
+    #In tab log, log(0) == -1
+    ecc = np.where(res == -1, 0, log_table[res][:, 0])
 
     bit_message.extend(format(x, "08b") for x in ecc)
 

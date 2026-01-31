@@ -581,8 +581,10 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
     print("\nApply Modulo 255 to the Generator Polynomial")
     print("Polynomial Generator with Exposant: ", gene_poly_exp)
 
-    #Convert generator poly to log 
-    gene_poly_log = log_table[gene_poly_exp][:, 0]
+    #Convert generator poly to log
+    #EXEPT for the log (0) stay 0
+    #In tab log, log(0) == -1
+    gene_poly_log = np.where(gene_poly_exp == -1, 0, log_table[gene_poly_exp][:, 0])
     print("\nConvert the Generator Polynomial to the Log Base")
     print("Polynomial Generator with Log: ", gene_poly_log)
 
@@ -651,8 +653,10 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
     print("\nThe Polynomial Remaining is the Error Code Corrector")
     print("Error Code Corrector with Exp: ", res)
 
-    #Error Correction Code in log
-    ecc = log_table[res][:, 0]
+    #Convert Error Correction Code to log
+    #EXEPT for the log (0) stay 0
+    #In tab log, log(0) == -1
+    ecc = np.where(res == -1, 0, log_table[res][:, 0])
     print("\nConvert theError Code Corrector to the log base")
     print("Error Code Corrector with Log: ", ecc)
 
