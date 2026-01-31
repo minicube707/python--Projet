@@ -298,7 +298,7 @@ def get_ecc_level(mode, len_data):
     while(1):
 
         ecc_level = input("Which level of Encryption do you want ?:\n")
-        print("Level ", ecc_level)
+        print("Input ", ecc_level)
 
         if (ecc_level not in "LMQH0"):
             print("Wrong input.")
@@ -339,21 +339,16 @@ def num_encode(data):
 
     #For all the 3 digits
     for i in range(0, len(data), 3):
+        chunk = data[i:i+3]
+        num = int(chunk)
 
-        #Verify if the fisrt digits begin with a 0
-        num = int(data[i:i+3])
-
-        #Avoid divide by zero encountered in log10
-        if (num == 0):
-            bit_message.append(format(num, "04b"))
-
-        elif (np.log10(num) >= 2):
+        if len(chunk) == 3:
             bit_message.append(format(num, "010b"))
-           
-        elif (np.log10(num) >= 1):
+
+        elif len(chunk) == 2:
             bit_message.append(format(num, "07b"))
 
-        else:
+        else:  # len == 1
             bit_message.append(format(num, "04b"))
 
     return bit_message
@@ -398,7 +393,7 @@ def manage_data():
     alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 
     data = input("Write something: ")
-    print("DATA ", data)
+    print("Data ", data)
 
     len_data = len(data)
 
@@ -438,18 +433,19 @@ def add_terminaison(bit_message, tt_num_codeword):
     tt_num_codeword_bit = tt_num_codeword * 8
 
     #Add Terminator
+    #If it Remains Enough Space Add Terminator
     len_bit_message = sum(len(elem) for elem in bit_message)
     add_terminator = tt_num_codeword_bit - len_bit_message
     if (add_terminator >= 4):
         bit_message.append("0000")
         len_bit_message += 4
 
+    #Else complete with 0
     else:
         bit_message.append(add_terminator * "0")
         len_bit_message += add_terminator
 
     #Make Length a Multiple of 8
-    len_bit_message = sum(len(elem) for elem in bit_message)
     add_zero = (8 - len_bit_message % 8) % 8
     bit_message.append(add_zero * "0")
     len_bit_message += add_zero
@@ -848,6 +844,7 @@ def data_masking(grid, ecc_level):
     cp_grid = list_mask_function[best_mask](grid)
     cp_grid = add_pattern(cp_grid)
     cp_grid = add_format_string(cp_grid, best_mask, ecc_level)
+    print("Mask: ", best_mask)
 
     return cp_grid
 
@@ -886,7 +883,7 @@ def main():
     plt.title(data)
     plt.imshow(1 - grid, cmap='gray')
     plt.axis("off")
-    plt.savefig(data + ".png")
+    plt.savefig("export/" + data + ".png")
     plt.show()
 
 main()

@@ -21,6 +21,12 @@ def print_bit(res):
         print(res[i], end="")
     print("")
 
+def print_flag(name):
+    width = 27  # longueur de la ligne de "="
+    print("\n" + "=" * width)
+    print(name.center(width))
+    print("=" * width)
+
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
 # │                     MAKE PATTERN                        │
@@ -308,7 +314,7 @@ def get_ecc_level(mode, len_data):
     while(1):
 
         ecc_level = input("Which level of Encryption do you want ?:\n")
-        print("Level ", ecc_level)
+        print("Input ", ecc_level)
 
         if (ecc_level not in "LMQH0"):
             print("Wrong input.")
@@ -349,23 +355,19 @@ def num_encode(data):
 
     #For all the 3 digits
     for i in range(0, len(data), 3):
+        chunk = data[i:i+3]
+        num = int(chunk)
 
-        #Verify if the fisrt digits begin with a 0
-        num = int(data[i:i+3])
-
-        #Avoid divide by zero encountered in log10
-        if (num == 0):
-            bit_message.append(format(num, "04b"))
-
-        elif (np.log10(num) >= 2):
+        if len(chunk) == 3:
             bit_message.append(format(num, "010b"))
-           
-        elif (np.log10(num) >= 1):
-            bit_message.append(format(num, "07b"))
 
-        else:
+        elif len(chunk) == 2:
+            bit_message.append(format(num, "07b"))
+            
+        else:  # len == 1
             bit_message.append(format(num, "04b"))
 
+    print("Encode Data:", bit_message)
     return bit_message
 
 
@@ -390,6 +392,7 @@ def alpha_encode(data):
             num = alphanumeric.find(data[i])
             bit_message.append(format(num, "06b"))
     
+    print("Encode Data:", bit_message)
     return bit_message
 
 def bit_encode(data):
@@ -400,6 +403,7 @@ def bit_encode(data):
         unicode = ord(data[i])
         bit_message.append(format(unicode, "08b"))
 
+    print("Encode Data:", bit_message)
     return bit_message
 
 def manage_data():
@@ -408,7 +412,9 @@ def manage_data():
     alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 
     data = input("Write something: ")
-    print("DATA ", data)
+
+    print("Data ", data)
+    print("")
 
     len_data = len(data)
 
@@ -444,6 +450,8 @@ def manage_data():
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0100" + bit_count)
 
+    print("Mode Indicator: ", bit_message[0][:4])
+    print("Character Count Indicator: ", bit_message)
     return bit_message, data, mode
 
 def add_terminaison(bit_message, tt_num_codeword):
@@ -451,29 +459,50 @@ def add_terminaison(bit_message, tt_num_codeword):
     tt_num_codeword_bit = tt_num_codeword * 8
 
     #Add Terminator
+    #If it Remains Enough Space Add Terminator
     len_bit_message = sum(len(elem) for elem in bit_message)
+    print("\nTotal len bit: ", len_bit_message)
+
     add_terminator = tt_num_codeword_bit - len_bit_message
     if (add_terminator >= 4):
         bit_message.append("0000")
         len_bit_message += 4
 
+        print("There is more than 4 bit remaining")
+        print("Add 0000")
+
+    #Else complete with 0
     else:
         bit_message.append(add_terminator * "0")
         len_bit_message += add_terminator
 
+        print("There is less than 4 bit remaining")
+        print("Add ", add_terminator * "0")
+
     #Make Length a Multiple of 8
-    len_bit_message = sum(len(elem) for elem in bit_message)
+    print("\nTotal len bit: ", len_bit_message)
+
     add_zero = (8 - len_bit_message % 8) % 8
     bit_message.append(add_zero * "0")
     len_bit_message += add_zero
     
+    print("\nMake the Lenght a Multiplr of 8")
+    print("Add ", add_zero * "0")
+
     #Add Pad Byte
     nb_padding = (tt_num_codeword_bit - len_bit_message) // 8
+
+    print("\nComplete the remaning bytes with an alternation of 00010001 and 11101100")
+    print("Bytes remaining: ", nb_padding)
+
     for i in range(nb_padding):
         if (i % 2):
             bit_message.append("00010001")
+            print("Add: ", "00010001")
+
         else:
             bit_message.append("11101100")
+            print("Add: ", "11101100")
   
     return bit_message
 
@@ -486,8 +515,10 @@ def add_correction(bit_message):
     bytes_numbers = [bitstream[i:i+8] for i in range(0, len(bitstream), 8)]
 
     #Check the sequence of data codeword bytes in octect and hexadecimal
-    #print([int(octet, 2) for octet in bytes_numbers])
-    #print([hex(int(octet, 2)) for octet in bytes_numbers])
+    print("\nFinal Data Encoding")
+    print("Bit: ", bytes_numbers)
+    print("Octal: ", [int(octet, 2) for octet in bytes_numbers])
+    print("Hexa: ", [hex(int(octet, 2)) for octet in bytes_numbers])
 
     return bytes_numbers
 
@@ -533,34 +564,60 @@ def generate_poly(nb_correction, log_table):
 
 def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
 
+    print("\n=========")
+    print("Polynomial Long Division")
+    print("=========")
+
+    print("\nPolynomial Data with Exposant: ", data_poly_exp)
+    print("Polynomial Generator with Exposant: ", gene_poly_exp)
+
     #Multiply the generator polynome by the first term of the data polynome
     gene_poly_exp += data_poly_exp[0]
-
+    print("\nAdd the First Element of the Data Polynomial to the Generator Polynomial")
+    print("Polynomial Generator with Exposant: ", gene_poly_exp)
+    
     #Apply modulo to stay in Galois Field (256)
     gene_poly_exp %= 255
+    print("\nApply Modulo 255 to the Generator Polynomial")
+    print("Polynomial Generator with Exposant: ", gene_poly_exp)
 
     #Convert generator poly to log 
     gene_poly_log = log_table[gene_poly_exp][:, 0]
+    print("\nConvert the Generator Polynomial to the Log Base")
+    print("Polynomial Generator with Log: ", gene_poly_log)
 
     #Convert data poly to log
     #EXEPT for the log (0) stay 0
     #In tab log, log(0) == -1
     data_poly_log = np.where(data_poly_exp == -1, 0, log_table[data_poly_exp][:, 0])
+    print("\nConvert the Data Polynomial to the Log Base")
+    print("Polynomial Data with Log: ", data_poly_log)
 
     #Fill with zeros to fit the size 
+    print("\nFill the Polynomail to have the same lenght")
     if (len(data_poly_log) > len(gene_poly_log)):
+        print("Add ", (len(data_poly_log) - len(gene_poly_log)) * "0", " to the Polynomial Generator with Log")
         gene_poly_log = np.append(gene_poly_log, np.zeros(len(data_poly_log) - len(gene_poly_log), dtype=int))
+        print("Polynomial Generator with Log: ", gene_poly_log)
+
     else:
+        print("Add ", (len(gene_poly_log) - len(data_poly_log)) * "0", " to the Polynomial Data with Log")
         data_poly_log = np.append(data_poly_log, np.zeros(len(gene_poly_log) - len(data_poly_log), dtype=int))
-    
+        print("Polynomial Data with Log: ", data_poly_log)
+
     #Apply XOR
     gene_poly_log ^= data_poly_log
-    
+    print("\nApply XOR to the Polynomial Generator with Polynomial Data")
+    print("Polynomial Generator with Log: ", gene_poly_log)
+
     #Pop the first element of the generator poly
     gene_poly_log = np.delete(gene_poly_log, 0)
+    print("Remove the first element to the Polynomial Generator with Log")
 
     #Convert generator poly to exp 
     gene_poly_exp = log_table[gene_poly_log][:, 1]
+    print("\nConvert the Generator Polynomial to the log base")
+    print("Polynomial Generator with Exp: ", gene_poly_exp)
 
     return (gene_poly_exp)
 
@@ -570,19 +627,38 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
 
     #Encryption Reed Solomon
     gene_poly_exp = generate_poly(ecc_block_size, log_table)
+
+    print("\nCreate a Generator Polynomial for ", ecc_block_size, "size")
+    print("Polynomial Generator with Exposant: ", gene_poly_exp)
+
     data_poly_log = np.array([int(octet, 2) for octet in bit_message])
     data_poly_exp = log_table[data_poly_log][:, 1]
 
+    print("Use the Log Table to Express the Data Polynomial in Exposant Form")
+    print("Polynomial Data with Exposant: ", data_poly_exp)
+
     #The division has been performed 16 times, which is the number of terms in the message polynomial
+    print("\nApply the Polynomial Long Division ", tt_num_codeword, " time")
+
     res = data_poly_exp
     for i in range(tt_num_codeword):
         res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
 
+    print("\n=========")
+    print("Error Code Corrector")
+    print("=========")
+
+    print("\nThe Polynomial Remaining is the Error Code Corrector")
+    print("Error Code Corrector with Exp: ", res)
+
     #Error Correction Code in log
     ecc = log_table[res][:, 0]
+    print("\nConvert theError Code Corrector to the log base")
+    print("Error Code Corrector with Log: ", ecc)
 
-    #print(ecc)
-    #print("ECC ", [hex(octet) for octet in ecc])
+    print("\nBit: ", [format(x, "08b") for x in ecc])
+    print("Octal: ", [oct(octet) for octet in ecc])
+    print("Hexa:  ", [hex(octet) for octet in ecc])
 
     bit_message.extend(format(x, "08b") for x in ecc)
 
@@ -690,10 +766,17 @@ def penalty_4(grid):
 
 def calcul_penalty(grid):
 
+    print("Calcul Penalty")
     penalty = penalty_1(grid)
     penalty += penalty_2(grid)
     penalty += penalty_3(grid)
     penalty += penalty_4(grid)
+
+    print("Penalty N°1: ", penalty_1(grid))
+    print("Penalty N°2: ", penalty_2(grid))
+    print("Penalty N°3: ", penalty_3(grid))
+    print("Penalty N°4: ", penalty_4(grid))
+    print("Sum Penalty: ", penalty)
 
     return penalty
 
@@ -854,6 +937,8 @@ def data_masking(grid, ecc_level):
     best_penalty = 10000
 
     for i, f in enumerate(list_mask_function):
+        print("\nEval Mask N°", i)
+
         cp_grid = f(grid.copy())
         cp_grid = add_pattern(cp_grid)
         cp_grid = add_format_string(cp_grid, i, ecc_level)
@@ -863,6 +948,8 @@ def data_masking(grid, ecc_level):
         if (penalty < best_penalty):
             best_penalty = penalty
             best_mask = i
+    
+    print("\nBest Mask is ", best_mask, " Mask with ", best_penalty, " score")
 
     #Return the QR Code with the best penalty
     cp_grid = list_mask_function[best_mask](grid)
@@ -879,6 +966,9 @@ def get_rs_structure(ecc_level):
     tt_num_codeword = rs["error_correction"][ecc_level]["total_data_codewords"]
     ecc_block_size = rs["error_correction"][ecc_level]["ec_codewords_per_block"]
 
+    print("\nTotal Data Codewords: ", tt_num_codeword)
+    print("Error Code Correction per Block: ", ecc_block_size)
+
     return tt_num_codeword, ecc_block_size
 
 # ┌─────────────────────────────────────────────────────────┐
@@ -889,28 +979,34 @@ def get_rs_structure(ecc_level):
 
 def main():
 
+    print_flag("Encode Data")
     bit_message, data, mode = manage_data()
     ecc_level = get_ecc_level(mode, len(data))
     tt_num_codeword, ecc_block_size = get_rs_structure(ecc_level)
     bit_message = add_terminaison(bit_message, tt_num_codeword)
     bit_message = add_correction(bit_message)
+
+    print_flag("DATA ANALYSIS & DATA ENCODING")
     bit_message = manage_error_correction(bit_message, tt_num_codeword, ecc_block_size)
-
-    #print(bit_message)
-    #print([hex(int(b, 2)) for b in bit_message])
-
+    
+    print("\nFinal Codewords")
+    print("Bit: ", bit_message)
+    print("Octal: ", [oct(int(octet, 2)) for octet in bit_message])
+    print("Hexa:  ", [hex(int(octet, 2)) for octet in bit_message])
+ 
     #Convertion list string to list numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
     
     grid = write_data(list_numpy)
 
+    print_flag("DATA MASKING")
     grid = data_masking(grid, ecc_level)
-
+    
     plt.figure()
     plt.title(data)
     plt.imshow(1 - grid, cmap='gray')
     plt.axis("off")
-    plt.savefig(data + ".png")
+    plt.savefig("export/" + data + ".png")
     plt.show()
 
 main()
