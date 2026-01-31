@@ -11,8 +11,8 @@ Observe how a sandpile organizes itself under different conditions and explore t
 
 ### 📱 QR Code Generator
 📂 → `QR Code/`  
-A QR code generator built from scratch.  
-⚠️ This project is still a work in progress and is not fully functional yet.
+This project allows users to generate QR codes from custom input data and export them in a usable format.  
+The goal of this project was to better understand encoding, data representation, and image generation. 
 
 ### 🎮 Tetris
 📂 → `Tetris/`  
