@@ -19,24 +19,24 @@ np.set_printoptions(linewidth=150)
 def create_finder_pattern():
 
     ##Create a grid a 7*7 full of 0
-    patern = np.zeros((7, 7), dtype=int)
+    pattern = np.zeros((7, 7), dtype=int)
 
     #Extren black edge
-    patern[0, :] = 1
-    patern[6, :] = 1
-    patern[:, 0] = 1
-    patern[:, 6] = 1
+    pattern[0, :] = 1
+    pattern[6, :] = 1
+    pattern[:, 0] = 1
+    pattern[:, 6] = 1
 
     #Middle square
-    patern[2, 2:5] = 1
-    patern[3, 2:5] = 1
-    patern[4, 2:5] = 1
+    pattern[2, 2:5] = 1
+    pattern[3, 2:5] = 1
+    pattern[4, 2:5] = 1
     
-    return patern
+    return pattern
 
 def add_finder_partten(grid):
 
-    patern  = create_finder_pattern()
+    pattern  = create_finder_pattern()
 
     #Init pattern then add finding pattern. Only the space for format information remains.
     grid[0:9, 0:9] = 0
@@ -44,9 +44,9 @@ def add_finder_partten(grid):
     grid[-8:, 0:9] = 0
 
     #Add Finding Pattern
-    grid[0:7, 0:7] = patern
-    grid[0:7, -7:] = patern
-    grid[-7:, 0:7] = patern
+    grid[0:7, 0:7] = pattern
+    grid[0:7, -7:] = pattern
+    grid[-7:, 0:7] = pattern
 
     return (grid)
 
@@ -239,12 +239,12 @@ def write_data_second(grid, data, start_x, nb_line_tt):
         grid, nb_line = write_up_data(grid, data, start_x, len_grid, nb_line_tt * 2, 7)
         nb_line_tt += nb_line
 
-        #Avoid to overwrite the timing patern
+        #Avoid to overwrite the timing pattern
         grid, nb_line = write_up_data(grid, data, start_x, 5, nb_line_tt * 2, 0)
         nb_line_tt += nb_line
         start_x -= 2
 
-        #Avoid to overwrite the timing patern
+        #Avoid to overwrite the timing pattern
         grid, nb_line = write_down_data(grid, data, start_x, 0, nb_line_tt * 2, 5)
         nb_line_tt += nb_line
          
@@ -263,7 +263,7 @@ def write_data_last(grid, data, start_x, nb_line_tt):
         nb_line_tt += nb_line
         start_x -= 2
 
-        #Avoid to overwrite the timing patern
+        #Avoid to overwrite the timing pattern
         if (start_x == 6):
             start_x -= 1
 
@@ -297,7 +297,7 @@ def get_ecc_level(mode, len_data):
 
     while(1):
 
-        ecc_level = input("Which level of Encryption do you want ?:\n")
+        ecc_level = input("\nWhich level of Encryption do you want ?:\n")
         print("Input ", ecc_level)
 
         if (ecc_level not in "LMQH0"):
@@ -313,7 +313,7 @@ def get_ecc_level(mode, len_data):
     if ecc_level != "0":
         
         #Check if the data isn't longer than the lenght max for a error code correction
-        max_len = rs["capacities"][ecc_level][mode]
+        max_len = rs["versions"]["1"]["capacities"][ecc_level][mode]
         if (len_data > max_len):
             print("Overflow Len data")
             exit()
@@ -326,7 +326,7 @@ def get_ecc_level(mode, len_data):
 
     for i in range(4):
 
-        if (rs["capacities"][list_ecc_level[i]][mode] > len_data):
+        if (rs["versions"]["1"]["capacities"][list_ecc_level[i]][mode] > len_data):
             print("Level Error Code Correction: ", list_ecc_level[i])
             return list_ecc_level[i]
     
@@ -377,7 +377,7 @@ def alpha_encode(data):
     
     return bit_message
 
-def bit_encode(data):
+def byte_encode(data):
 
     bit_message = []
     for i in range(len(data)):
@@ -420,7 +420,7 @@ def manage_data():
     #Bit
     else:
         bit_count = format(len_data, "08b")
-        bit_message = bit_encode(data)  
+        bit_message = byte_encode(data)  
         mode = "byte"
 
         #Add Mode Indicator & Character Count Indicator
@@ -857,8 +857,8 @@ def get_rs_structure(ecc_level):
     with open("utils/qr_rs_structure.json", "r") as f:
         rs = json.load(f)
     
-    tt_num_codeword = rs["error_correction"][ecc_level]["total_data_codewords"]
-    ecc_block_size = rs["error_correction"][ecc_level]["ec_codewords_per_block"]
+    tt_num_codeword = rs["versions"]["1"]["error_correction"][ecc_level]["total_data_codewords"]
+    ecc_block_size = rs["versions"]["1"]["error_correction"][ecc_level]["ec_codewords_per_block"]
 
     return tt_num_codeword, ecc_block_size
 
