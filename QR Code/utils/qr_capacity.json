@@ -1,29 +1,52 @@
 {
-  "version": 1,
-  "capacities": {
-    "L": {
-      "numeric": 41,
-      "alphanumeric": 25,
-      "byte": 17,
-      "kanji": 10
+  "versions": {
+    "1": {
+      "capacities": {
+        "L": { "numeric": 41, "alphanumeric": 25, "byte": 17, "kanji": 10 },
+        "M": { "numeric": 34, "alphanumeric": 20, "byte": 14, "kanji": 8 },
+        "Q": { "numeric": 27, "alphanumeric": 16, "byte": 11, "kanji": 7 },
+        "H": { "numeric": 17, "alphanumeric": 10, "byte": 7, "kanji": 4 }
+      }
     },
-    "M": {
-      "numeric": 34,
-      "alphanumeric": 20,
-      "byte": 14,
-      "kanji": 8
+    "2": {
+      "capacities": {
+        "L": { "numeric": 77, "alphanumeric": 47, "byte": 32, "kanji": 20 },
+        "M": { "numeric": 63, "alphanumeric": 38, "byte": 26, "kanji": 16 },
+        "Q": { "numeric": 48, "alphanumeric": 29, "byte": 20, "kanji": 12 },
+        "H": { "numeric": 34, "alphanumeric": 20, "byte": 14, "kanji": 8 }
+      }
     },
-    "Q": {
-      "numeric": 27,
-      "alphanumeric": 16,
-      "byte": 11,
-      "kanji": 7
+    "3": {
+      "capacities": {
+        "L": { "numeric": 127, "alphanumeric": 77, "byte": 53, "kanji": 32 },
+        "M": { "numeric": 101, "alphanumeric": 61, "byte": 42, "kanji": 26 },
+        "Q": { "numeric": 77, "alphanumeric": 47, "byte": 32, "kanji": 20 },
+        "H": { "numeric": 58, "alphanumeric": 35, "byte": 24, "kanji": 15 }
+      }
     },
-    "H": {
-      "numeric": 17,
-      "alphanumeric": 10,
-      "byte": 7,
-      "kanji": 4
+    "4": {
+      "capacities": {
+        "L": { "numeric": 187, "alphanumeric": 114, "byte": 78, "kanji": 48 },
+        "M": { "numeric": 149, "alphanumeric": 90, "byte": 62, "kanji": 38 },
+        "Q": { "numeric": 111, "alphanumeric": 67, "byte": 46, "kanji": 28 },
+        "H": { "numeric": 82, "alphanumeric": 50, "byte": 34, "kanji": 21 }
+      }
+    },
+    "5": {
+      "capacities": {
+        "L": { "numeric": 255, "alphanumeric": 154, "byte": 106, "kanji": 65 },
+        "M": { "numeric": 202, "alphanumeric": 122, "byte": 84, "kanji": 52 },
+        "Q": { "numeric": 144, "alphanumeric": 87, "byte": 60, "kanji": 37 },
+        "H": { "numeric": 106, "alphanumeric": 64, "byte": 44, "kanji": 27 }
+      }
+    },
+    "6": {
+      "capacities": {
+        "L": { "numeric": 322, "alphanumeric": 195, "byte": 134, "kanji": 82 },
+        "M": { "numeric": 255, "alphanumeric": 154, "byte": 106, "kanji": 65 },
+        "Q": { "numeric": 178, "alphanumeric": 108, "byte": 74, "kanji": 45 },
+        "H": { "numeric": 139, "alphanumeric": 84, "byte": 58, "kanji": 36 }
+      }
     }
   }
 }

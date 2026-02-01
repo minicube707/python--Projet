@@ -1,53 +1,154 @@
 {
-  "version": 1,
-  "error_correction": {
-    "L": {
-      "total_data_codewords": 19,
-      "ec_codewords_per_block": 7,
-      "blocks": [
-        {
-          "group": 1,
-          "num_blocks": 1,
-          "data_codewords_per_block": 19
+  "versions": {
+    "1": {
+      "error_correction": {
+        "L": {
+          "total_data_codewords": 19,
+          "ec_codewords_per_block": 7,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 19 }]
+        },
+        "M": {
+          "total_data_codewords": 16,
+          "ec_codewords_per_block": 10,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 16 }]
+        },
+        "Q": {
+          "total_data_codewords": 13,
+          "ec_codewords_per_block": 13,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 13 }]
+        },
+        "H": {
+          "total_data_codewords": 9,
+          "ec_codewords_per_block": 17,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 9 }]
         }
-      ],
-      "total_data_codewords_calculated": 19
+      }
     },
-    "M": {
-      "total_data_codewords": 16,
-      "ec_codewords_per_block": 10,
-      "blocks": [
-        {
-          "group": 1,
-          "num_blocks": 1,
-          "data_codewords_per_block": 16
+    "2": {
+      "error_correction": {
+        "L": {
+          "total_data_codewords": 34,
+          "ec_codewords_per_block": 10,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 34 }]
+        },
+        "M": {
+          "total_data_codewords": 28,
+          "ec_codewords_per_block": 16,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 28 }]
+        },
+        "Q": {
+          "total_data_codewords": 22,
+          "ec_codewords_per_block": 22,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 22 }]
+        },
+        "H": {
+          "total_data_codewords": 16,
+          "ec_codewords_per_block": 28,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 16 }]
         }
-      ],
-      "total_data_codewords_calculated": 16
+      }
     },
-    "Q": {
-      "total_data_codewords": 13,
-      "ec_codewords_per_block": 13,
-      "blocks": [
-        {
-          "group": 1,
-          "num_blocks": 1,
-          "data_codewords_per_block": 13
+    "3": {
+      "error_correction": {
+        "L": {
+          "total_data_codewords": 55,
+          "ec_codewords_per_block": 15,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 55 }]
+        },
+        "M": {
+          "total_data_codewords": 44,
+          "ec_codewords_per_block": 26,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 44 }]
+        },
+        "Q": {
+          "total_data_codewords": 34,
+          "ec_codewords_per_block": 18,
+          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 17 }]
+        },
+        "H": {
+          "total_data_codewords": 26,
+          "ec_codewords_per_block": 22,
+          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 13 }]
         }
-      ],
-      "total_data_codewords_calculated": 13
+      }
     },
-    "H": {
-      "total_data_codewords": 9,
-      "ec_codewords_per_block": 17,
-      "blocks": [
-        {
-          "group": 1,
-          "num_blocks": 1,
-          "data_codewords_per_block": 9
+    "4": {
+      "error_correction": {
+        "L": {
+          "total_data_codewords": 80,
+          "ec_codewords_per_block": 20,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 80 }]
+        },
+        "M": {
+          "total_data_codewords": 64,
+          "ec_codewords_per_block": 18,
+          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 32 }]
+        },
+        "Q": {
+          "total_data_codewords": 48,
+          "ec_codewords_per_block": 26,
+          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 24 }]
+        },
+        "H": {
+          "total_data_codewords": 36,
+          "ec_codewords_per_block": 16,
+          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 9 }]
         }
-      ],
-      "total_data_codewords_calculated": 9
+      }
+    },
+    "5": {
+      "error_correction": {
+        "L": {
+          "total_data_codewords": 108,
+          "ec_codewords_per_block": 26,
+          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 108 }]
+        },
+        "M": {
+          "total_data_codewords": 86,
+          "ec_codewords_per_block": 24,
+          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 43 }]
+        },
+        "Q": {
+          "total_data_codewords": 62,
+          "ec_codewords_per_block": 18,
+          "blocks": [
+            { "group": 1, "num_blocks": 2, "data_codewords_per_block": 15 },
+            { "group": 2, "num_blocks": 2, "data_codewords_per_block": 16 }
+          ]
+        },
+        "H": {
+          "total_data_codewords": 46,
+          "ec_codewords_per_block": 22,
+          "blocks": [
+            { "group": 1, "num_blocks": 2, "data_codewords_per_block": 11 },
+            { "group": 2, "num_blocks": 2, "data_codewords_per_block": 12 }
+          ]
+        }
+      }
+    },
+    "6": {
+      "error_correction": {
+        "L": {
+          "total_data_codewords": 136,
+          "ec_codewords_per_block": 18,
+          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 68 }]
+        },
+        "M": {
+          "total_data_codewords": 108,
+          "ec_codewords_per_block": 16,
+          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 27 }]
+        },
+        "Q": {
+          "total_data_codewords": 76,
+          "ec_codewords_per_block": 24,
+          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 19 }]
+        },
+        "H": {
+          "total_data_codewords": 60,
+          "ec_codewords_per_block": 28,
+          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 15 }]
+        }
+      }
     }
   }
 }
