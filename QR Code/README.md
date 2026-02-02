@@ -123,11 +123,11 @@ This folder is where all **generated QR codes** are saved:
 
 Here are some examples of QR codes generated with this project:
 
-![42](export\42.png)
+![42](export/42.png)
 
-![HELLO_WORLD](export\Hello_World.png)
+![HELLO_WORLD](export/Hello_World.png)
 
-![Youtube](export\https___www_youtube_com_.png)
+![Youtube](export/https___www_youtube_com_.png)
 
 ## 📚 References & Sources
 
