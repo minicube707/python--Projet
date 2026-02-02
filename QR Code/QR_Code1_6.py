@@ -522,7 +522,7 @@ def add_terminaison(bit_message, tt_num_codeword):
   
     return bit_message
 
-def add_correction(bit_message):
+def convert_to_bytes(bit_message):
 
     # Join all the bits
     bitstream = ''.join(bit_message)
@@ -640,30 +640,51 @@ def generate_reed_solomon_ecc(bit_message, data_codewords_per_block, ecc_block_s
 def manage_error_correction(bit_message, dict_ecc_info):
 
     #Get Data form the Dict
-    num_blocks = dict_ecc_info["num_blocks"]
     ecc_block_size = dict_ecc_info["ec_codewords_per_block"]
-    data_codewords_per_block = dict_ecc_info["data_codewords_per_block"]
-        
-    #Create list of Data Block
-    list_data_block = []
-    for i in range(num_blocks):
-        list_data_block.append(bit_message[data_codewords_per_block * i : data_codewords_per_block * (i + 1)])
+    list_block_info = dict_ecc_info["block_info"]
     
-    #Create list of Error Code Corrector
     list_ecc = []
-    for i in range(num_blocks):
-        list_ecc.append(generate_reed_solomon_ecc(list_data_block[i], data_codewords_per_block, ecc_block_size))
+    list_data_block = []
+
+    #If there is 2 groups
+    if (len(list_block_info) == 2):
+        size_block_data_group1 = list_block_info[0]["data_codewords_per_block"]
+    
+    #If there is only one group
+    else:
+        size_block_data_group1 = 0
+
+    #For each block
+    for k in range(len(list_block_info)):
+        
+        #Get the info from the block
+        num_blocks = list_block_info[k]["num_blocks"]
+        data_codewords_per_block = list_block_info[k]["data_codewords_per_block"]
+
+        #Create list of Data Block
+        for i in range(num_blocks):
+            list_data_block.append(bit_message[(data_codewords_per_block * i) + (k * 2 * size_block_data_group1): data_codewords_per_block * (i + 1) + (k * 2 *size_block_data_group1)])
+
+        #Create list of Error Code Corrector
+        for i in range(num_blocks):
+            list_ecc.append(generate_reed_solomon_ecc(list_data_block[i + k * len(list_block_info)], data_codewords_per_block, ecc_block_size))
 
     #Create the bit message
     bit_message = []
     for j in range(data_codewords_per_block):
-        for i in range(num_blocks):
-            bit_message.append(list_data_block[i][j])
+        for k in range(len(list_block_info)):
+            for i in range(num_blocks):
+                
+                #Check if we are not in out of range
+                if (j < len(list_data_block[i + k * len(list_block_info)])):
+                    bit_message.append(list_data_block[i + k * len(list_block_info)][j])
 
     #Add the ECC
     for j in range(ecc_block_size):
-        for i in range(num_blocks):
-            bit_message.append(list_ecc[i][j])
+        for k in range(len(list_block_info)):
+            for i in range(num_blocks):
+
+                bit_message.append(list_ecc[i + k * len(list_block_info)][j])
 
     return bit_message
 
@@ -961,8 +982,7 @@ def get_rs_structure(ecc_level, qr_level):
     return {
         "total_data_codewords": ecc_info["total_data_codewords"],
         "ec_codewords_per_block": ecc_info["ec_codewords_per_block"],
-        "num_blocks": ecc_info["blocks"][0]["num_blocks"],
-        "data_codewords_per_block": ecc_info["blocks"][0]["data_codewords_per_block"],
+        "block_info": ecc_info["blocks"]
     }
 
 
@@ -978,18 +998,17 @@ def main():
     ecc_level, qr_level = get_ecc_level(mode, len(data))
     dict_ecc_info = get_rs_structure(ecc_level, qr_level)
     bit_message = add_terminaison(bit_message, dict_ecc_info["total_data_codewords"])
-    bit_message = add_correction(bit_message)
+    bit_message = convert_to_bytes(bit_message)
     bit_message = manage_error_correction(bit_message, dict_ecc_info)
     bit_message = add_remainder_bit(bit_message, qr_level)
 
     #Convertion list string to list numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
 
-    #list_numpy = np.arange(500)
     grid = write_data(list_numpy, qr_level)
-
     grid = data_masking(grid, ecc_level, qr_level)
 
+    #Change char that cannot be use to save the QR Code
     safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
     
     plt.figure()
