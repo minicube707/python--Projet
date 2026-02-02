@@ -139,7 +139,7 @@ This project is based on the following high-quality resources:
 - Nayuki – Creating a QR Code Step by Step  
   https://www.nayuki.io/page/creating-a-qr-code-step-by-step
 
-- YouTube – I built a QR code with my bare hands to see how it works 
+- YouTube – I built a QR code with my bare hands to see how it works  
   https://www.youtube.com/watch?v=w5ebcowAJD8
 
 ---
