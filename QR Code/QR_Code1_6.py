@@ -574,18 +574,24 @@ def generate_poly(nb_correction, log_table):
 
 def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
 
-    #Multiply the generator polynome by the first term of the data polynome
+    #If the First Element is a log(0). In Tab Log, log(0) == -1. Shift the Polynomial
+    if (data_poly_exp[0] == -1):
+
+        #Pop the First Eement of the Data Polynomial
+        data_poly_exp = np.delete(data_poly_exp, 0)
+
+        return data_poly_exp
+
+    #Multiply the Generator Polynomial by the First Term of the Data Polynomial
     gene_poly_exp += data_poly_exp[0]
 
     #Apply modulo to stay in Galois Field (256)
     gene_poly_exp %= 255
 
-    #Convert generator poly to log
-    #EXEPT for the log (0) stay 0
-    #In tab log, log(0) == -1
-    gene_poly_log = np.where(gene_poly_exp == -1, 0, log_table[gene_poly_exp][:, 0])
+    #Convert Generator Polynomial to Log
+    gene_poly_log = log_table[gene_poly_exp][:, 0]
 
-    #Convert data poly to log
+    #Convert Data Polynomial to Log
     #EXEPT for the log (0) stay 0
     #In tab log, log(0) == -1
     data_poly_log = np.where(data_poly_exp == -1, 0, log_table[data_poly_exp][:, 0])
@@ -593,21 +599,22 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
     #Fill with zeros to fit the size 
     if (len(data_poly_log) > len(gene_poly_log)):
         gene_poly_log = np.append(gene_poly_log, np.zeros(len(data_poly_log) - len(gene_poly_log), dtype=int))
+
     else:
         data_poly_log = np.append(data_poly_log, np.zeros(len(gene_poly_log) - len(data_poly_log), dtype=int))
-    
-    #Apply XOR
-    gene_poly_log ^= data_poly_log
-    
-    #Pop the first element of the generator poly
-    gene_poly_log = np.delete(gene_poly_log, 0)
 
-    #Convert generator poly to exp 
-    gene_poly_exp = log_table[gene_poly_log][:, 1]
+    #Apply XOR to the Data Polynomial
+    data_poly_log ^= gene_poly_log
 
-    return (gene_poly_exp)
+    #Pop the First Element of the Data Polynomial
+    data_poly_log = np.delete(data_poly_log, 0)
 
-def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
+    #Convert Data Polynomial to Exp 
+    data_poly_exp = log_table[data_poly_log][:, 1]
+
+    return (data_poly_exp)
+
+def generate_reed_solomon_ecc(bit_message, data_codewords_per_block, ecc_block_size):
     
     log_table = np.load("utils/log_table.npy")
 
@@ -616,9 +623,9 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
     data_poly_log = np.array([int(octet, 2) for octet in bit_message])
     data_poly_exp = log_table[data_poly_log][:, 1]
 
-    #The division has been performed 16 times, which is the number of terms in the message polynomial
+    #The division has been performed total number of codewords, which is the number of terms in the message polynomial
     res = data_poly_exp
-    for i in range(tt_num_codeword):
+    for i in range(data_codewords_per_block):
         res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
 
     #Convert Error Correction Code to log
@@ -626,9 +633,39 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
     #In tab log, log(0) == -1
     ecc = np.where(res == -1, 0, log_table[res][:, 0])
 
-    bit_message.extend(format(x, "08b") for x in ecc)
+    list_ecc = [format(x, "08b") for x in ecc]
 
-    return (bit_message)
+    return (list_ecc)
+
+def manage_error_correction(bit_message, dict_ecc_info):
+
+    #Get Data form the Dict
+    num_blocks = dict_ecc_info["num_blocks"]
+    ecc_block_size = dict_ecc_info["ec_codewords_per_block"]
+    data_codewords_per_block = dict_ecc_info["data_codewords_per_block"]
+        
+    #Create list of Data Block
+    list_data_block = []
+    for i in range(num_blocks):
+        list_data_block.append(bit_message[data_codewords_per_block * i : data_codewords_per_block * (i + 1)])
+    
+    #Create list of Error Code Corrector
+    list_ecc = []
+    for i in range(num_blocks):
+        list_ecc.append(generate_reed_solomon_ecc(list_data_block[i], data_codewords_per_block, ecc_block_size))
+
+    #Create the bit message
+    bit_message = []
+    for j in range(data_codewords_per_block):
+        for i in range(num_blocks):
+            bit_message.append(list_data_block[i][j])
+
+    #Add the ECC
+    for j in range(ecc_block_size):
+        for i in range(num_blocks):
+            bit_message.append(list_ecc[i][j])
+
+    return bit_message
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -918,11 +955,16 @@ def get_rs_structure(ecc_level, qr_level):
 
     with open("utils/qr_rs_structure.json", "r") as f:
         rs = json.load(f)
-    
-    tt_num_codeword = rs["versions"][qr_level]["error_correction"][ecc_level]["total_data_codewords"]
-    ecc_block_size = rs["versions"][qr_level]["error_correction"][ecc_level]["ec_codewords_per_block"]
 
-    return tt_num_codeword, ecc_block_size
+    ecc_info = rs["versions"][qr_level]["error_correction"][ecc_level]
+
+    return {
+        "total_data_codewords": ecc_info["total_data_codewords"],
+        "ec_codewords_per_block": ecc_info["ec_codewords_per_block"],
+        "num_blocks": ecc_info["blocks"][0]["num_blocks"],
+        "data_codewords_per_block": ecc_info["blocks"][0]["data_codewords_per_block"],
+    }
+
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -934,26 +976,22 @@ def main():
 
     bit_message, data, mode = manage_data()
     ecc_level, qr_level = get_ecc_level(mode, len(data))
-    tt_num_codeword, ecc_block_size = get_rs_structure(ecc_level, qr_level)
-    bit_message = add_terminaison(bit_message, tt_num_codeword)
+    dict_ecc_info = get_rs_structure(ecc_level, qr_level)
+    bit_message = add_terminaison(bit_message, dict_ecc_info["total_data_codewords"])
     bit_message = add_correction(bit_message)
-    bit_message = manage_error_correction(bit_message, tt_num_codeword, ecc_block_size)
+    bit_message = manage_error_correction(bit_message, dict_ecc_info)
     bit_message = add_remainder_bit(bit_message, qr_level)
 
     #Convertion list string to list numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
 
-    print("\nFinal Codewords")
-    print("Bit: ", bit_message)
-    print("Octal: ", [oct(int(octet, 2)) for octet in bit_message])
-    print("Hexa:  ", [hex(int(octet, 2)) for octet in bit_message])
-
     #list_numpy = np.arange(500)
     grid = write_data(list_numpy, qr_level)
 
     grid = data_masking(grid, ecc_level, qr_level)
-    safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
 
+    safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
+    
     plt.figure()
     plt.title(data)
     plt.imshow(1 - grid, cmap='gray')
