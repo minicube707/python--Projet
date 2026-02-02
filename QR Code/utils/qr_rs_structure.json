@@ -2,152 +2,322 @@
   "versions": {
     "1": {
       "error_correction": {
-        "L": {
-          "total_data_codewords": 19,
-          "ec_codewords_per_block": 7,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 19 }]
-        },
-        "M": {
-          "total_data_codewords": 16,
-          "ec_codewords_per_block": 10,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 16 }]
-        },
-        "Q": {
-          "total_data_codewords": 13,
-          "ec_codewords_per_block": 13,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 13 }]
-        },
-        "H": {
-          "total_data_codewords": 9,
-          "ec_codewords_per_block": 17,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 9 }]
-        }
+        "L": { "total_data_codewords": 19, "ec_codewords_per_block": 7, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 19 }] },
+        "M": { "total_data_codewords": 16, "ec_codewords_per_block": 10, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 16 }] },
+        "Q": { "total_data_codewords": 13, "ec_codewords_per_block": 13, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 13 }] },
+        "H": { "total_data_codewords": 9, "ec_codewords_per_block": 17, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 9 }] }
       }
     },
     "2": {
       "error_correction": {
-        "L": {
-          "total_data_codewords": 34,
-          "ec_codewords_per_block": 10,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 34 }]
-        },
-        "M": {
-          "total_data_codewords": 28,
-          "ec_codewords_per_block": 16,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 28 }]
-        },
-        "Q": {
-          "total_data_codewords": 22,
-          "ec_codewords_per_block": 22,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 22 }]
-        },
-        "H": {
-          "total_data_codewords": 16,
-          "ec_codewords_per_block": 28,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 16 }]
-        }
+        "L": { "total_data_codewords": 34, "ec_codewords_per_block": 10, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 34 }] },
+        "M": { "total_data_codewords": 28, "ec_codewords_per_block": 16, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 28 }] },
+        "Q": { "total_data_codewords": 22, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 22 }] },
+        "H": { "total_data_codewords": 16, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 16 }] }
       }
     },
     "3": {
       "error_correction": {
-        "L": {
-          "total_data_codewords": 55,
-          "ec_codewords_per_block": 15,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 55 }]
-        },
-        "M": {
-          "total_data_codewords": 44,
-          "ec_codewords_per_block": 26,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 44 }]
-        },
-        "Q": {
-          "total_data_codewords": 34,
-          "ec_codewords_per_block": 18,
-          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 17 }]
-        },
-        "H": {
-          "total_data_codewords": 26,
-          "ec_codewords_per_block": 22,
-          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 13 }]
-        }
+        "L": { "total_data_codewords": 55, "ec_codewords_per_block": 15, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 55 }] },
+        "M": { "total_data_codewords": 44, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 44 }] },
+        "Q": { "total_data_codewords": 34, "ec_codewords_per_block": 18, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 17 }] },
+        "H": { "total_data_codewords": 26, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 13 }] }
       }
     },
     "4": {
       "error_correction": {
-        "L": {
-          "total_data_codewords": 80,
-          "ec_codewords_per_block": 20,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 80 }]
-        },
-        "M": {
-          "total_data_codewords": 64,
-          "ec_codewords_per_block": 18,
-          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 32 }]
-        },
-        "Q": {
-          "total_data_codewords": 48,
-          "ec_codewords_per_block": 26,
-          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 24 }]
-        },
-        "H": {
-          "total_data_codewords": 36,
-          "ec_codewords_per_block": 16,
-          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 9 }]
-        }
+        "L": { "total_data_codewords": 80, "ec_codewords_per_block": 20, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 80 }] },
+        "M": { "total_data_codewords": 64, "ec_codewords_per_block": 18, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 32 }] },
+        "Q": { "total_data_codewords": 48, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 24 }] },
+        "H": { "total_data_codewords": 36, "ec_codewords_per_block": 16, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 9 }] }
       }
     },
     "5": {
       "error_correction": {
-        "L": {
-          "total_data_codewords": 108,
-          "ec_codewords_per_block": 26,
-          "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 108 }]
-        },
-        "M": {
-          "total_data_codewords": 86,
-          "ec_codewords_per_block": 24,
-          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 43 }]
-        },
-        "Q": {
-          "total_data_codewords": 62,
-          "ec_codewords_per_block": 18,
-          "blocks": [
-            { "group": 1, "num_blocks": 2, "data_codewords_per_block": 15 },
-            { "group": 2, "num_blocks": 2, "data_codewords_per_block": 16 }
-          ]
-        },
-        "H": {
-          "total_data_codewords": 46,
-          "ec_codewords_per_block": 22,
-          "blocks": [
-            { "group": 1, "num_blocks": 2, "data_codewords_per_block": 11 },
-            { "group": 2, "num_blocks": 2, "data_codewords_per_block": 12 }
-          ]
-        }
+        "L": { "total_data_codewords": 108, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 108 }] },
+        "M": { "total_data_codewords": 86, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 43 }] },
+        "Q": { "total_data_codewords": 62, "ec_codewords_per_block": 18, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 16 }] },
+        "H": { "total_data_codewords": 46, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 11 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 12 }] }
       }
     },
     "6": {
       "error_correction": {
-        "L": {
-          "total_data_codewords": 136,
-          "ec_codewords_per_block": 18,
-          "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 68 }]
-        },
-        "M": {
-          "total_data_codewords": 108,
-          "ec_codewords_per_block": 16,
-          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 27 }]
-        },
-        "Q": {
-          "total_data_codewords": 76,
-          "ec_codewords_per_block": 24,
-          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 19 }]
-        },
-        "H": {
-          "total_data_codewords": 60,
-          "ec_codewords_per_block": 28,
-          "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 15 }]
-        }
+        "L": { "total_data_codewords": 136, "ec_codewords_per_block": 18, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 68 }] },
+        "M": { "total_data_codewords": 108, "ec_codewords_per_block": 16, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 27 }] },
+        "Q": { "total_data_codewords": 76, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 19 }] },
+        "H": { "total_data_codewords": 60, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 15 }] }
+      }
+    },
+    "7": {
+      "error_correction": {
+        "L": { "total_data_codewords": 156, "ec_codewords_per_block": 20, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 78 }] },
+        "M": { "total_data_codewords": 124, "ec_codewords_per_block": 18, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 31 }] },
+        "Q": { "total_data_codewords": 88, "ec_codewords_per_block": 18, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 14 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 15 }] },
+        "H": { "total_data_codewords": 64, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 13 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 14 }] }
+      }
+    },
+    "8": {
+      "error_correction": {
+        "L": { "total_data_codewords": 194, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 97 }] },
+        "M": { "total_data_codewords": 154, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 38 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 39 }] },
+        "Q": { "total_data_codewords": 110, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 18 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 19 }] },
+        "H": { "total_data_codewords": 84, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 14 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 15 }] }
+      }
+    },
+    "9": {
+      "error_correction": {
+        "L": { "total_data_codewords": 232, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 116 }] },
+        "M": { "total_data_codewords": 182, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 3, "data_codewords_per_block": 36 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 37 }] },
+        "Q": { "total_data_codewords": 132, "ec_codewords_per_block": 20, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 16 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 17 }] },
+        "H": { "total_data_codewords": 98, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 12 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 13 }] }
+      }
+    },
+    "10": {
+      "error_correction": {
+        "L": { "total_data_codewords": 274, "ec_codewords_per_block": 18, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 68 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 69 }] },
+        "M": { "total_data_codewords": 216, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 43 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 44 }] },
+        "Q": { "total_data_codewords": 154, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 6, "data_codewords_per_block": 19 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 20 }] },
+        "H": { "total_data_codewords": 116, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 6, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "11": {
+      "error_correction": {
+        "L": { "total_data_codewords": 324, "ec_codewords_per_block": 20, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 81 }] },
+        "M": { "total_data_codewords": 254, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 50 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 51 }] },
+        "Q": { "total_data_codewords": 180, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 140, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 3, "data_codewords_per_block": 12 }, { "group": 2, "num_blocks": 8, "data_codewords_per_block": 13 }] }
+      }
+    },
+    "12": {
+      "error_correction": {
+        "L": { "total_data_codewords": 370, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 92 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 93 }] },
+        "M": { "total_data_codewords": 290, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 6, "data_codewords_per_block": 36 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 37 }] },
+        "Q": { "total_data_codewords": 210, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 20 }, { "group": 2, "num_blocks": 6, "data_codewords_per_block": 21 }] },
+        "H": { "total_data_codewords": 158, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 7, "data_codewords_per_block": 14 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 15 }] }
+      }
+    },
+    "13": {
+      "error_correction": {
+        "L": { "total_data_codewords": 428, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 107 }] },
+        "M": { "total_data_codewords": 334, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 8, "data_codewords_per_block": 37 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 38 }] },
+        "Q": { "total_data_codewords": 244, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 8, "data_codewords_per_block": 20 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 21 }] },
+        "H": { "total_data_codewords": 180, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 12, "data_codewords_per_block": 11 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 12 }] }
+      }
+    },
+    "14": {
+      "error_correction": {
+        "L": { "total_data_codewords": 461, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 3, "data_codewords_per_block": 115 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 116 }] },
+        "M": { "total_data_codewords": 365, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 40 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 41 }] },
+        "Q": { "total_data_codewords": 267, "ec_codewords_per_block": 20, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 16 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 17 }] },
+        "H": { "total_data_codewords": 197, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 12 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 13 }] }
+      }
+    },
+    "15": {
+      "error_correction": {
+        "L": { "total_data_codewords": 523, "ec_codewords_per_block": 22, "blocks": [{ "group": 1, "num_blocks": 5, "data_codewords_per_block": 87 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 88 }] },
+        "M": { "total_data_codewords": 415, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 5, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 303, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 5, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 7, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 223, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 12 }, { "group": 2, "num_blocks": 7, "data_codewords_per_block": 13 }] }
+      }
+    },
+    "16": {
+      "error_correction": {
+        "L": { "total_data_codewords": 589, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 5, "data_codewords_per_block": 98 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 99 }] },
+        "M": { "total_data_codewords": 461, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 3, "data_codewords_per_block": 44 }, { "group": 2, "num_blocks": 8, "data_codewords_per_block": 45 }] },
+        "Q": { "total_data_codewords": 339, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 18 }, { "group": 2, "num_blocks": 15, "data_codewords_per_block": 19 }] },
+        "H": { "total_data_codewords": 253, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 14 }, { "group": 2, "num_blocks": 3, "data_codewords_per_block": 15 }] }
+      }
+    },
+    "17": {
+      "error_correction": {
+        "L": { "total_data_codewords": 659, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 1, "data_codewords_per_block": 109 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 110 }] },
+        "M": { "total_data_codewords": 519, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 11, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 385, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 283, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 3, "data_codewords_per_block": 14 }, { "group": 2, "num_blocks": 17, "data_codewords_per_block": 15 }] }
+      }
+    },
+    "18": {
+      "error_correction": {
+        "L": { "total_data_codewords": 735, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 5, "data_codewords_per_block": 122 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 123 }] },
+        "M": { "total_data_codewords": 583, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 40 }, { "group": 2, "num_blocks": 13, "data_codewords_per_block": 41 }] },
+        "Q": { "total_data_codewords": 431, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 313, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 14 }, { "group": 2, "num_blocks": 7, "data_codewords_per_block": 15 }] }
+      }
+    },
+    "19": {
+      "error_correction": {
+        "L": { "total_data_codewords": 817, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 3, "data_codewords_per_block": 116 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 117 }] },
+        "M": { "total_data_codewords": 639, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 9, "data_codewords_per_block": 42 }, { "group": 2, "num_blocks": 6, "data_codewords_per_block": 43 }] },
+        "Q": { "total_data_codewords": 483, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 21 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 22 }] },
+        "H": { "total_data_codewords": 341, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 13 }, { "group": 2, "num_blocks": 10, "data_codewords_per_block": 14 }] }
+      }
+    },
+    "20": {
+      "error_correction": {
+        "L": { "total_data_codewords": 907, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 3, "data_codewords_per_block": 113 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 114 }] },
+        "M": { "total_data_codewords": 709, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 539, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 385, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 10, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "21": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1003, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 111 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 112 }] },
+        "M": { "total_data_codewords": 789, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 593, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 21 }, { "group": 2, "num_blocks": 6, "data_codewords_per_block": 22 }] },
+        "H": { "total_data_codewords": 425, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 19, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 6, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "22": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1105, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 110 }, { "group": 2, "num_blocks": 8, "data_codewords_per_block": 111 }] },
+        "M": { "total_data_codewords": 869, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 39 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 40 }] },
+        "Q": { "total_data_codewords": 649, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 7, "data_codewords_per_block": 21 }, { "group": 2, "num_blocks": 16, "data_codewords_per_block": 22 }] },
+        "H": { "total_data_codewords": 461, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 34, "data_codewords_per_block": 13 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 14 }] }
+      }
+    },
+    "23": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1213, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 121 }, { "group": 2, "num_blocks": 6, "data_codewords_per_block": 122 }] },
+        "M": { "total_data_codewords": 953, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 18, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 713, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 14, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 511, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 16, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 14, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "24": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1327, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 6, "data_codewords_per_block": 120 }, { "group": 2, "num_blocks": 5, "data_codewords_per_block": 121 }] },
+        "M": { "total_data_codewords": 1043, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 6, "data_codewords_per_block": 40 }, { "group": 2, "num_blocks": 19, "data_codewords_per_block": 41 }] },
+        "Q": { "total_data_codewords": 779, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 16, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 559, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 30, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "25": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1447, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 8, "data_codewords_per_block": 111 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 112 }] },
+        "M": { "total_data_codewords": 1137, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 18, "data_codewords_per_block": 40 }, { "group": 2, "num_blocks": 9, "data_codewords_per_block": 41 }] },
+        "Q": { "total_data_codewords": 851, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 7, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 22, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 609, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 22, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 13, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "26": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1573, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 10, "data_codewords_per_block": 112 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 113 }] },
+        "M": { "total_data_codewords": 1235, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 19, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 11, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 925, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 28, "data_codewords_per_block": 23 }, { "group": 2, "num_blocks": 12, "data_codewords_per_block": 24 }] },
+        "H": { "total_data_codewords": 661, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 19, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 23, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "27": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1705, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 14, "data_codewords_per_block": 121 }, { "group": 2, "num_blocks": 1, "data_codewords_per_block": 122 }] },
+        "M": { "total_data_codewords": 1339, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 21, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 1003, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 8, "data_codewords_per_block": 23 }, { "group": 2, "num_blocks": 33, "data_codewords_per_block": 24 }] },
+        "H": { "total_data_codewords": 717, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 30, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 16, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "28": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1843, "ec_codewords_per_block": 26, "blocks": [{ "group": 1, "num_blocks": 14, "data_codewords_per_block": 115 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 116 }] },
+        "M": { "total_data_codewords": 1449, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 7, "data_codewords_per_block": 41 }, { "group": 2, "num_blocks": 28, "data_codewords_per_block": 42 }] },
+        "Q": { "total_data_codewords": 1087, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 4, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 41, "data_codewords_per_block": 23 }] },
+        "H": { "total_data_codewords": 777, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 18, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 31, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "29": {
+      "error_correction": {
+        "L": { "total_data_codewords": 1987, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 116 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 117 }] },
+        "M": { "total_data_codewords": 1563, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 42 }, { "group": 2, "num_blocks": 27, "data_codewords_per_block": 43 }] },
+        "Q": { "total_data_codewords": 1173, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 34, "data_codewords_per_block": 23 }, { "group": 2, "num_blocks": 15, "data_codewords_per_block": 24 }] },
+        "H": { "total_data_codewords": 839, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 31, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 23, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "30": {
+      "error_correction": {
+        "L": { "total_data_codewords": 2137, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 16, "data_codewords_per_block": 118 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 119 }] },
+        "M": { "total_data_codewords": 1681, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 19, "data_codewords_per_block": 43 }, { "group": 2, "num_blocks": 22, "data_codewords_per_block": 44 }] },
+        "Q": { "total_data_codewords": 1263, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 42, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 10, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 905, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 23, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 36, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "31": {
+      "error_correction": {
+        "L": { "total_data_codewords": 2293, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 120 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 121 }] },
+        "M": { "total_data_codewords": 1803, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 29, "data_codewords_per_block": 43 }, { "group": 2, "num_blocks": 15, "data_codewords_per_block": 44 }] },
+        "Q": { "total_data_codewords": 1357, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 10, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 46, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 975, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 23, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 41, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "32": {
+      "error_correction": {
+        "L": { "total_data_codewords": 2455, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 13, "data_codewords_per_block": 122 }, { "group": 2, "num_blocks": 7, "data_codewords_per_block": 123 }] },
+        "M": { "total_data_codewords": 1931, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 34, "data_codewords_per_block": 43 }, { "group": 2, "num_blocks": 13, "data_codewords_per_block": 44 }] },
+        "Q": { "total_data_codewords": 1455, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 20, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 40, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1049, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 43, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 26, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "33": {
+      "error_correction": {
+        "L": { "total_data_codewords": 2623, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 12, "data_codewords_per_block": 124 }, { "group": 2, "num_blocks": 9, "data_codewords_per_block": 125 }] },
+        "M": { "total_data_codewords": 2063, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 16, "data_codewords_per_block": 44 }, { "group": 2, "num_blocks": 35, "data_codewords_per_block": 45 }] },
+        "Q": { "total_data_codewords": 1557, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 24, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 40, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1127, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 34, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 40, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "34": {
+      "error_correction": {
+        "L": { "total_data_codewords": 2797, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 11, "data_codewords_per_block": 127 }, { "group": 2, "num_blocks": 11, "data_codewords_per_block": 128 }] },
+        "M": { "total_data_codewords": 2201, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 40, "data_codewords_per_block": 44 }, { "group": 2, "num_blocks": 16, "data_codewords_per_block": 45 }] },
+        "Q": { "total_data_codewords": 1663, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 44, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 25, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1209, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 46, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 33, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "35": {
+      "error_correction": {
+        "L": { "total_data_codewords": 2977, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 7, "data_codewords_per_block": 124 }, { "group": 2, "num_blocks": 17, "data_codewords_per_block": 125 }] },
+        "M": { "total_data_codewords": 2343, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 18, "data_codewords_per_block": 45 }, { "group": 2, "num_blocks": 42, "data_codewords_per_block": 46 }] },
+        "Q": { "total_data_codewords": 1773, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 48, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 26, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1295, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 49, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 35, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "36": {
+      "error_correction": {
+        "L": { "total_data_codewords": 3161, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 22, "data_codewords_per_block": 121 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 122 }] },
+        "M": { "total_data_codewords": 2485, "ec_codewords_per_block": 24, "blocks": [{ "group": 1, "num_blocks": 6, "data_codewords_per_block": 47 }, { "group": 2, "num_blocks": 54, "data_codewords_per_block": 48 }] },
+        "Q": { "total_data_codewords": 1885, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 31, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 46, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1381, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 33, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 56, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "37": {
+      "error_correction": {
+        "L": { "total_data_codewords": 3351, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 2, "data_codewords_per_block": 124 }, { "group": 2, "num_blocks": 25, "data_codewords_per_block": 125 }] },
+        "M": { "total_data_codewords": 2631, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 45 }, { "group": 2, "num_blocks": 46, "data_codewords_per_block": 46 }] },
+        "Q": { "total_data_codewords": 2003, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 52, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 29, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1465, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 44, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 49, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "38": {
+      "error_correction": {
+        "L": { "total_data_codewords": 3547, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 10, "data_codewords_per_block": 126 }, { "group": 2, "num_blocks": 18, "data_codewords_per_block": 127 }] },
+        "M": { "total_data_codewords": 2781, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 17, "data_codewords_per_block": 46 }, { "group": 2, "num_blocks": 48, "data_codewords_per_block": 47 }] },
+        "Q": { "total_data_codewords": 2115, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 14, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 70, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1549, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 39, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 58, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "39": {
+      "error_correction": {
+        "L": { "total_data_codewords": 3751, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 14, "data_codewords_per_block": 129 }, { "group": 2, "num_blocks": 15, "data_codewords_per_block": 130 }] },
+        "M": { "total_data_codewords": 2943, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 33, "data_codewords_per_block": 46 }, { "group": 2, "num_blocks": 34, "data_codewords_per_block": 47 }] },
+        "Q": { "total_data_codewords": 2243, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 51, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 38, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1641, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 46, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 55, "data_codewords_per_block": 16 }] }
+      }
+    },
+    "40": {
+      "error_correction": {
+        "L": { "total_data_codewords": 3961, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 19, "data_codewords_per_block": 132 }, { "group": 2, "num_blocks": 11, "data_codewords_per_block": 133 }] },
+        "M": { "total_data_codewords": 3105, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 25, "data_codewords_per_block": 47 }, { "group": 2, "num_blocks": 45, "data_codewords_per_block": 48 }] },
+        "Q": { "total_data_codewords": 2367, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 15, "data_codewords_per_block": 24 }, { "group": 2, "num_blocks": 79, "data_codewords_per_block": 25 }] },
+        "H": { "total_data_codewords": 1731, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 33, "data_codewords_per_block": 15 }, { "group": 2, "num_blocks": 81, "data_codewords_per_block": 16 }] }
       }
     }
   }
