@@ -3,6 +3,7 @@ from numpy.lib.stride_tricks import sliding_window_view
 import matplotlib.pyplot as plt
 import os 
 import json
+import re
 
 module_dir = os.path.dirname(__file__)
 os.chdir(module_dir)
@@ -568,60 +569,68 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
     print("Polynomial Long Division")
     print("=========")
 
-    print("\nPolynomial Data with Exposant: ", data_poly_exp)
-    print("Polynomial Generator with Exposant: ", gene_poly_exp)
+    print("\nData Polynomial with Exposant: ", data_poly_exp)
+    print("Generator Polynomial with Exposant: ", gene_poly_exp)
 
-    #Multiply the generator polynome by the first term of the data polynome
+    #If the First Element is a log(0). In Tab Log, log(0) == -1. Shift the Polynomial
+    if (data_poly_exp[0] == -1):
+
+        #Pop the First Eement of the Data Polynomial
+        data_poly_exp = np.delete(data_poly_exp, 0)
+        print("\nThe first element begin of the Data Polynomial begin with a -1")
+        print("Shift the Data Polynomial")
+
+        return data_poly_exp
+
+    #Multiply the Generator Polynomial by the First Term of the Data Polynomial
     gene_poly_exp += data_poly_exp[0]
     print("\nAdd the First Element of the Data Polynomial to the Generator Polynomial")
-    print("Polynomial Generator with Exposant: ", gene_poly_exp)
-    
+    print("Generator Polynomial with Exposant: ", gene_poly_exp)
+
     #Apply modulo to stay in Galois Field (256)
     gene_poly_exp %= 255
     print("\nApply Modulo 255 to the Generator Polynomial")
-    print("Polynomial Generator with Exposant: ", gene_poly_exp)
+    print("Generator Polynomial with Exposant: ", gene_poly_exp)
 
-    #Convert generator poly to log
-    #EXEPT for the log (0) stay 0
-    #In tab log, log(0) == -1
-    gene_poly_log = np.where(gene_poly_exp == -1, 0, log_table[gene_poly_exp][:, 0])
+    #Convert Generator Polynomial to Log
+    gene_poly_log = log_table[gene_poly_exp][:, 0]
     print("\nConvert the Generator Polynomial to the Log Base")
-    print("Polynomial Generator with Log: ", gene_poly_log)
+    print("Generator Polynomial with Log: ", gene_poly_log)
 
-    #Convert data poly to log
+    #Convert Data Polynomial to Log
     #EXEPT for the log (0) stay 0
     #In tab log, log(0) == -1
     data_poly_log = np.where(data_poly_exp == -1, 0, log_table[data_poly_exp][:, 0])
     print("\nConvert the Data Polynomial to the Log Base")
-    print("Polynomial Data with Log: ", data_poly_log)
+    print("Data Polynomial with Log: ", data_poly_log)
 
     #Fill with zeros to fit the size 
     print("\nFill the Polynomail to have the same lenght")
     if (len(data_poly_log) > len(gene_poly_log)):
-        print("Add ", (len(data_poly_log) - len(gene_poly_log)) * "0", " to the Polynomial Generator with Log")
+        print("Add ", (len(data_poly_log) - len(gene_poly_log)) * "0", " to the Generator Polynomial with Log")
         gene_poly_log = np.append(gene_poly_log, np.zeros(len(data_poly_log) - len(gene_poly_log), dtype=int))
-        print("Polynomial Generator with Log: ", gene_poly_log)
+        print("Generator Polynomial with Log: ", gene_poly_log)
 
     else:
-        print("Add ", (len(gene_poly_log) - len(data_poly_log)) * "0", " to the Polynomial Data with Log")
+        print("Add ", (len(gene_poly_log) - len(data_poly_log)) * "0", " to the Data Polynomial with Log")
         data_poly_log = np.append(data_poly_log, np.zeros(len(gene_poly_log) - len(data_poly_log), dtype=int))
-        print("Polynomial Data with Log: ", data_poly_log)
+        print("Data Polynomial with Log: ", data_poly_log)
 
-    #Apply XOR
-    gene_poly_log ^= data_poly_log
-    print("\nApply XOR to the Polynomial Generator with Polynomial Data")
-    print("Polynomial Generator with Log: ", gene_poly_log)
+    #Apply XOR to the Data Polynomial
+    data_poly_log ^= gene_poly_log
+    print("\nApply XOR to the Data Polynomial with Generator Polynomial")
+    print("Generator Polynomial with Log: ", gene_poly_log)
 
-    #Pop the first element of the generator poly
-    gene_poly_log = np.delete(gene_poly_log, 0)
+    #Pop the First Element of the Data Polynomial
+    data_poly_log = np.delete(data_poly_log, 0)
     print("Remove the first element to the Polynomial Generator with Log")
 
-    #Convert generator poly to exp 
-    gene_poly_exp = log_table[gene_poly_log][:, 1]
+    #Convert Data Polynomial to Exp 
+    data_poly_exp = log_table[data_poly_log][:, 1]
     print("\nConvert the Generator Polynomial to the log base")
-    print("Polynomial Generator with Exp: ", gene_poly_exp)
+    print("Generator Polynomial with Exposant: ", gene_poly_exp)
 
-    return (gene_poly_exp)
+    return (data_poly_exp)
 
 def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
     
@@ -969,11 +978,13 @@ def get_rs_structure(ecc_level):
     
     tt_num_codeword = rs["versions"]["1"]["error_correction"][ecc_level]["total_data_codewords"]
     ecc_block_size = rs["versions"]["1"]["error_correction"][ecc_level]["ec_codewords_per_block"]
+    data_codewords_per_block = rs["versions"]["1"]["error_correction"][ecc_level]["blocks"][0]["data_codewords_per_block"]
 
     print("\nTotal Data Codewords: ", tt_num_codeword)
     print("Error Code Correction per Block: ", ecc_block_size)
+    print("Data CodeWords per Block: ", data_codewords_per_block)
 
-    return tt_num_codeword, ecc_block_size
+    return tt_num_codeword, ecc_block_size, data_codewords_per_block
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -986,12 +997,12 @@ def main():
     print_flag("Encode Data")
     bit_message, data, mode = manage_data()
     ecc_level = get_ecc_level(mode, len(data))
-    tt_num_codeword, ecc_block_size = get_rs_structure(ecc_level)
+    tt_num_codeword, ecc_block_size, data_codewords_per_block = get_rs_structure(ecc_level)
     bit_message = add_terminaison(bit_message, tt_num_codeword)
     bit_message = add_correction(bit_message)
 
     print_flag("DATA ANALYSIS & DATA ENCODING")
-    bit_message = manage_error_correction(bit_message, tt_num_codeword, ecc_block_size)
+    bit_message = manage_error_correction(bit_message, data_codewords_per_block, ecc_block_size)
     
     print("\nFinal Codewords")
     print("Bit: ", bit_message)
@@ -1006,11 +1017,13 @@ def main():
     print_flag("DATA MASKING")
     grid = data_masking(grid, ecc_level)
     
+    safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
+    
     plt.figure()
     plt.title(data)
     plt.imshow(1 - grid, cmap='gray')
     plt.axis("off")
-    plt.savefig("export/" + data + ".png")
+    plt.savefig("export/" + safe_data + ".png")
     plt.show()
 
 main()

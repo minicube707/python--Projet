@@ -3,6 +3,7 @@ from numpy.lib.stride_tricks import sliding_window_view
 import matplotlib.pyplot as plt
 import os 
 import json
+import re
 
 module_dir = os.path.dirname(__file__)
 os.chdir(module_dir)
@@ -12,7 +13,7 @@ np.set_printoptions(linewidth=150)
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
-# │                     MAKE PATTERN                        │
+# │                     MAKE PATTERN                        │ 
 # │                                                         │
 # └─────────────────────────────────────────────────────────┘
 
@@ -512,18 +513,24 @@ def generate_poly(nb_correction, log_table):
 
 def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
 
-    #Multiply the generator polynome by the first term of the data polynome
+    #If the First Element is a log(0). In Tab Log, log(0) == -1. Shift the Polynomial
+    if (data_poly_exp[0] == -1):
+
+        #Pop the First Eement of the Data Polynomial
+        data_poly_exp = np.delete(data_poly_exp, 0)
+
+        return data_poly_exp
+
+    #Multiply the Generator Polynomial by the First Term of the Data Polynomial
     gene_poly_exp += data_poly_exp[0]
 
     #Apply modulo to stay in Galois Field (256)
     gene_poly_exp %= 255
 
-    #Convert generator poly to log
-    #EXEPT for the log (0) stay 0
-    #In tab log, log(0) == -1
-    gene_poly_log = np.where(gene_poly_exp == -1, 0, log_table[gene_poly_exp][:, 0])
+    #Convert Generator Polynomial to Log
+    gene_poly_log = log_table[gene_poly_exp][:, 0]
 
-    #Convert data poly to log
+    #Convert Data Polynomial to Log
     #EXEPT for the log (0) stay 0
     #In tab log, log(0) == -1
     data_poly_log = np.where(data_poly_exp == -1, 0, log_table[data_poly_exp][:, 0])
@@ -531,21 +538,22 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
     #Fill with zeros to fit the size 
     if (len(data_poly_log) > len(gene_poly_log)):
         gene_poly_log = np.append(gene_poly_log, np.zeros(len(data_poly_log) - len(gene_poly_log), dtype=int))
+
     else:
         data_poly_log = np.append(data_poly_log, np.zeros(len(gene_poly_log) - len(data_poly_log), dtype=int))
-    
-    #Apply XOR
-    gene_poly_log ^= data_poly_log
-    
-    #Pop the first element of the generator poly
-    gene_poly_log = np.delete(gene_poly_log, 0)
 
-    #Convert generator poly to exp 
-    gene_poly_exp = log_table[gene_poly_log][:, 1]
+    #Apply XOR to the Data Polynomial
+    data_poly_log ^= gene_poly_log
 
-    return (gene_poly_exp)
+    #Pop the First Element of the Data Polynomial
+    data_poly_log = np.delete(data_poly_log, 0)
 
-def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
+    #Convert Data Polynomial to Exp 
+    data_poly_exp = log_table[data_poly_log][:, 1]
+
+    return (data_poly_exp)
+
+def manage_error_correction(bit_message, data_codewords_per_block, ecc_block_size):
     
     log_table = np.load("utils/log_table.npy")
 
@@ -556,7 +564,7 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
 
     #The division has been performed 16 times, which is the number of terms in the message polynomial
     res = data_poly_exp
-    for i in range(tt_num_codeword):
+    for i in range(data_codewords_per_block):
         res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
 
     #Convert Error Correction Code to log
@@ -859,8 +867,9 @@ def get_rs_structure(ecc_level):
     
     tt_num_codeword = rs["versions"]["1"]["error_correction"][ecc_level]["total_data_codewords"]
     ecc_block_size = rs["versions"]["1"]["error_correction"][ecc_level]["ec_codewords_per_block"]
+    data_codewords_per_block = rs["versions"]["1"]["error_correction"][ecc_level]["blocks"][0]["data_codewords_per_block"]
 
-    return tt_num_codeword, ecc_block_size
+    return tt_num_codeword, ecc_block_size, data_codewords_per_block
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -872,10 +881,10 @@ def main():
 
     bit_message, data, mode = manage_data()
     ecc_level = get_ecc_level(mode, len(data))
-    tt_num_codeword, ecc_block_size = get_rs_structure(ecc_level)
+    tt_num_codeword, ecc_block_size, data_codewords_per_block = get_rs_structure(ecc_level)
     bit_message = add_terminaison(bit_message, tt_num_codeword)
     bit_message = add_correction(bit_message)
-    bit_message = manage_error_correction(bit_message, tt_num_codeword, ecc_block_size)
+    bit_message = manage_error_correction(bit_message, data_codewords_per_block, ecc_block_size)
 
     #Convertion list string to list numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
@@ -883,11 +892,13 @@ def main():
     grid = write_data(list_numpy)
     grid = data_masking(grid, ecc_level)
 
+    safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
+    
     plt.figure()
     plt.title(data)
     plt.imshow(1 - grid, cmap='gray')
     plt.axis("off")
-    plt.savefig("export/" + data + ".png")
+    plt.savefig("export/" + safe_data + ".png")
     plt.show()
 
 main()
