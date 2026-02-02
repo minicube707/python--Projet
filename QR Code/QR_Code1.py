@@ -461,7 +461,7 @@ def add_terminaison(bit_message, tt_num_codeword):
   
     return bit_message
 
-def add_correction(bit_message):
+def convert_to_bytes(bit_message):
 
     # Join all the bits
     bitstream = ''.join(bit_message)
@@ -883,7 +883,7 @@ def main():
     ecc_level = get_ecc_level(mode, len(data))
     tt_num_codeword, ecc_block_size, data_codewords_per_block = get_rs_structure(ecc_level)
     bit_message = add_terminaison(bit_message, tt_num_codeword)
-    bit_message = add_correction(bit_message)
+    bit_message = convert_to_bytes(bit_message)
     bit_message = manage_error_correction(bit_message, data_codewords_per_block, ecc_block_size)
 
     #Convertion list string to list numpy
@@ -892,6 +892,7 @@ def main():
     grid = write_data(list_numpy)
     grid = data_masking(grid, ecc_level)
 
+    #Change char that cannot be use to save the QR Cod
     safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
     
     plt.figure()
