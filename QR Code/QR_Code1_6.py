@@ -74,7 +74,7 @@ def add_pattern(grid, qr_level):
     grid = add_finder_partten(grid)
     grid = add_timing_partern(grid)
 
-    if (qr_level != "1"):
+    if (2 <= int(qr_level) <= 6):
         grid = add_alignment_patterns(grid)
 
     return (grid)
@@ -184,16 +184,12 @@ def add_format_string(grid, num_mask, ecc_level):
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
-# │                     WRITE DATA                          │
+# │              CREATE FORBIDEN NODE                       │
 # │                                                         │
 # └─────────────────────────────────────────────────────────┘
 
-def create_list_forbiden_node(qr_level):
+def add_forbiden_node_finding_pattern(forbidden, N):
 
-    N = qr_dimension(int(qr_level))
-    forbidden = set()
-
-    #Finding Pattern
     #Top Left
     for y in range(0, 9):
         for x in range(0, 9):
@@ -209,18 +205,46 @@ def create_list_forbiden_node(qr_level):
         for x in range(0, 9):
             forbidden.add((x, y))
 
-    # Timing patterns
+    return forbidden
+
+def add_forbiden_node_timing_pattern(forbidden, N):
+
     for i in range(8, N - 8):
         forbidden.add((i, 6))
         forbidden.add((6, i))
 
-    #Alignement Pattern
-    if (qr_level != "1"):
+    return forbidden
+
+def add_forbiden_node_alignement_pattern(forbidden, N, qr_level):
+
+    #No Alignement Pattern for QR Code level 1
+    if int(qr_level == 1):
+        return forbidden
+    
+    #If the QR Code level is between 2 and 6
+    if (2 <= int(qr_level) <= 6):
         for y in range(N-9, N - 4):
             for x in range(N-9, N - 4):
                 forbidden.add((x, y))
 
+        return forbidden
+
+def create_list_forbiden_node(qr_level):
+
+    N = qr_dimension(int(qr_level))
+    forbidden = set()
+
+    forbidden = add_forbiden_node_finding_pattern(forbidden, N)
+    forbidden = add_forbiden_node_timing_pattern(forbidden, N)
+    forbidden = add_forbiden_node_alignement_pattern(forbidden, N, qr_level)
+
     return forbidden
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                     WRITE DATA                          │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
 
 def write_pair_data(grid, data1, data2, index_x, index_y, forbiden_node):
 
@@ -325,7 +349,7 @@ def write_data(data, qr_level):
     grid = np.zeros((dim, dim))
 
     nb_line_tt = 0
-    start_x = grid.shape[1] - 1
+    start_x = dim - 1
 
     grid, nb_line_tt, start_x = write_data_first(grid, data, forbiden_node)
     grid = write_data_last(grid, data, start_x, nb_line_tt,  forbiden_node)
@@ -334,67 +358,134 @@ def write_data(data, qr_level):
 
 def add_remainder_bit(bit_message, qr_level):
 
-    if (qr_level != "1"):
-        bit_message.append(7 * "0")
+    #If the QR Code level 1.
+    #Add 0 0s
+    if (int(qr_level == 1)):
+        return bit_message
     
-    return bit_message
+    #If the QR Code level is between 2 and 6.
+    #Add 7 0s
+    if (2 <= int(qr_level) <= 6):
+        bit_message.append(7 * "0")
+        return bit_message
 
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │                  GET INPUT USER                         │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
+def check_input():
+
+    correct_ecc_level = False
+    correct_qr_level =  False
+
+    while(not correct_ecc_level and not correct_qr_level):
+        
+        if (not correct_ecc_level):
+            ecc_level = input("\nWhich level of Encryption do you want ?:\n")
+            print("Input ", ecc_level)
+
+        if (not correct_qr_level):
+            qr_level = input("\nWhich level of QR Code do you want ?:\n")
+            print("Input ", qr_level)
+
+        if (ecc_level not in "LMQH0" or len(ecc_level) != 1):
+            print("\nWrong input for Encode.")
+            print("Please write: 'L', 'M', 'Q', 'H' or '0' (auto-mode)")
+        
+        else:
+            correct_ecc_level = True
+
+        if (qr_level not in "0123456" or len(qr_level) != 1):
+            print("\nWrong input for the Level of QR Code.")
+            print("Please write: '1', '2', '3', '4', '5', '6' or '0' (auto-mode)")
+
+        else:
+            correct_qr_level = True
+
+    return ecc_level, qr_level
+
+def ecc_qr_level_defined(rs, ecc_level, qr_level, type_data, len_data):
+
+    #Check if the data isn't longer than the lenght max for a error code correction
+    max_len = rs["versions"][qr_level]["capacities"][ecc_level][type_data]
+    if (len_data > max_len):
+        print("Overflow Len data")
+        exit()
+
+    print("Level Error Code Correction: ", ecc_level)
+    print("Level of the QR Code: ", qr_level)
+    return  ecc_level, qr_level
+
+def ecc_level_undefined(rs, qr_level, type_data, len_data):
+
+    #Mode auto
+    list_ecc_level =  ["H", "Q", "M", "L"]
+
+    for i in range(4):
+
+        if (rs["versions"][qr_level]["capacities"][list_ecc_level[i]][type_data] > len_data):
+            print("Level Error Code Correction: ", list_ecc_level[i])
+            print("Level of the QR Code: ", qr_level)
+            return list_ecc_level[i], qr_level
+    
+    print("Overflow Len data")
+    exit()
+
+def qr_level_undefined(rs, ecc_level, type_data, len_data):
+
+    #Mode auto
+    for i in range(1, 7):
+
+        if (rs["versions"][str(i)]["capacities"][ecc_level][type_data] > len_data):
+            print("Level Error Code Correction: ", ecc_level)
+            print("Level of the QR Code: ", str(i))
+            return ecc_level, str(i)
+    
+    print("Overflow Len data")
+    exit()
+
+def ecc_qr_level_undefined(rs, type_data, len_data):
+
+    list_ecc_level =  ["H", "Q", "M", "L"]
+
+    for i in range(1, 3):
+        for j in range(4):
+
+            if (rs["versions"][str(i)]["capacities"][list_ecc_level[j]][type_data] > len_data):
+                print("Level Error Code Correction: ", list_ecc_level[j])
+                print("Level of the QR Code: ", str(i))
+                return list_ecc_level[j], str(i)
+    
+    print("Overflow Len data")
+    exit()
+
+def get_ecc_level(type_data, len_data):
+
+    ecc_level, qr_level = check_input()
+    
+    with open("utils/qr_capacity.json", "r") as f:
+        rs = json.load(f)
+
+    if ecc_level != "0" and qr_level != "0":
+        return (ecc_qr_level_defined(rs, ecc_level, qr_level, type_data, len_data))
+       
+    if ecc_level == "0" and qr_level != "0":
+        return (ecc_level_undefined(rs, qr_level, type_data, len_data))
+    
+    if ecc_level != "0" and qr_level == "0":
+        return (qr_level_undefined(rs, ecc_level, type_data, len_data))
+
+    else:
+        return (ecc_qr_level_undefined(rs, type_data, len_data))
+    
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
 # │          DATA ANALYSIS & DATA ENCODING                  │
 # │                                                         │
 # └─────────────────────────────────────────────────────────┘
 
-def get_ecc_level(mode, len_data):
-
-    while(1):
-
-        ecc_level = input("\nWhich level of Encryption do you want ?:\n")
-        print("Input ", ecc_level)
-
-        qr_level = input("\nWhich level of QR Code do you want ?:\n")
-        print("Input ", qr_level)
-
-        if (ecc_level not in "LMQH0"):
-            print("\nWrong input for Encode.")
-            print("Please write: 'L', 'M', 'Q', 'H' or '0' (auto-mode)")
-        
-        if (qr_level not in "123456"):
-            print("\nWrong input for the Level of QR Code.")
-            print("Please write: '1', '2', '3', '4', '5' or '6'")
-
-        else:
-            break
-    
-    with open("utils/qr_capacity.json", "r") as f:
-        rs = json.load(f)
-
-    if ecc_level != "0":
-        
-        #Check if the data isn't longer than the lenght max for a error code correction
-        max_len = rs["versions"][qr_level]["capacities"][ecc_level][mode]
-        if (len_data > max_len):
-            print("Overflow Len data")
-            exit()
-
-        print("Level Error Code Correction: ", ecc_level)
-        print("Level of the QR Code: ", qr_level)
-        return  ecc_level, qr_level
-    
-    #Mode auto
-    list_ecc_level =  ["H", "Q", "M", "L"]
-
-    for i in range(1, 3):
-        for j in range(4):
-
-            if (rs["versions"][str(i)]["capacities"][list_ecc_level[j]][mode] > len_data):
-                print("Level Error Code Correction: ", list_ecc_level[j])
-                print("Level of the QR Code: ", qr_level)
-                return list_ecc_level[j], str(i)
-    
-    print("Overflow Len data")
-    exit()
-    
 def num_encode(data):
 
     bit_message = []
@@ -419,7 +510,7 @@ def num_encode(data):
 def alpha_encode(data):
 
     bit_message = []
-    alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
+    ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
     
     #For all the pair of char
     for i in range(0, len(data), 2):
@@ -427,14 +518,14 @@ def alpha_encode(data):
         string = data[i:i+2]
 
         if (len(string) == 2):
-            f = alphanumeric.find(data[i])
-            s = alphanumeric.find(data[i + 1])
+            f = ALPHANUMERIC.find(data[i])
+            s = ALPHANUMERIC.find(data[i + 1])
 
             num = (f * 45) + s
             bit_message.append(format(num, "011b"))
         
         else:
-            num = alphanumeric.find(data[i])
+            num = ALPHANUMERIC.find(data[i])
             bit_message.append(format(num, "06b"))
     
     return bit_message
@@ -451,8 +542,8 @@ def byte_encode(data):
 
 def manage_data():
 
-    numeric = "0123456789"
-    alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
+    NUMERIC = "0123456789"
+    ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 
     data = input("Write something: ")
     print("Data ", data)
@@ -460,21 +551,21 @@ def manage_data():
     len_data = len(data)
 
     #Numeric
-    if all(digit in list(numeric) for digit in list(data)):
+    if all(digit in list(NUMERIC) for digit in list(data)):
 
         bit_count = format(len_data, "010b")
         bit_message = num_encode(data)
-        mode = "numeric"
+        type_data = "numeric"
 
         #Add Mode Indicator & Character Count Indicator 
         bit_message.insert(0, "0001" + bit_count)
         
     #Alphanumeric
-    elif all(char in list(alphanumeric) for char in list(data)):
+    elif all(char in list(ALPHANUMERIC) for char in list(data)):
 
         bit_count = format(len_data, "09b")
         bit_message = alpha_encode(data)
-        mode = "alphanumeric"
+        type_data = "alphanumeric"
 
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0010" + bit_count)
@@ -483,12 +574,12 @@ def manage_data():
     else:
         bit_count = format(len_data, "08b")
         bit_message = byte_encode(data)  
-        mode = "byte"
+        type_data = "byte"
 
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0100" + bit_count)
 
-    return bit_message, data, mode
+    return bit_message, data, type_data
 
 def add_terminaison(bit_message, tt_num_codeword):
 
@@ -633,8 +724,11 @@ def generate_reed_solomon_ecc(bit_message, data_codewords_per_block, ecc_block_s
     #In tab log, log(0) == -1
     ecc = np.where(res == -1, 0, log_table[res][:, 0])
 
-    list_ecc = [format(x, "08b") for x in ecc]
+    #If len ECC is shorter than len ECC Block Size. Complete with 0 at the end
+    if (ecc.size < ecc_block_size):
+        ecc = np.append(ecc, np.zeros(ecc_block_size - len(ecc))).astype(dtype=int)
 
+    list_ecc = [format(x, "08b") for x in ecc]
     return (list_ecc)
 
 def manage_error_correction(bit_message, dict_ecc_info):
@@ -972,6 +1066,12 @@ def data_masking(grid, ecc_level, qr_level):
 
     return cp_grid
 
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │              GET DATA FROM JSON FILE                    │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
 def get_rs_structure(ecc_level, qr_level):
 
     with open("utils/qr_rs_structure.json", "r") as f:
@@ -994,8 +1094,8 @@ def get_rs_structure(ecc_level, qr_level):
 
 def main():
 
-    bit_message, data, mode = manage_data()
-    ecc_level, qr_level = get_ecc_level(mode, len(data))
+    bit_message, data, type_data = manage_data()
+    ecc_level, qr_level = get_ecc_level(type_data, len(data))
     dict_ecc_info = get_rs_structure(ecc_level, qr_level)
     bit_message = add_terminaison(bit_message, dict_ecc_info["total_data_codewords"])
     bit_message = convert_to_bytes(bit_message)
