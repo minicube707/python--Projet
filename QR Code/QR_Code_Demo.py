@@ -310,7 +310,7 @@ def write_data(data):
 # │                                                         │
 # └─────────────────────────────────────────────────────────┘
 
-def get_ecc_level(mode, len_data):
+def get_ecc_level(type_data, len_data):
 
     while(1):
 
@@ -330,7 +330,7 @@ def get_ecc_level(mode, len_data):
     if ecc_level != "0":
         
         #Check if the data isn't longer than the lenght max for a error code correction
-        max_len = rs["versions"]["1"]["capacities"][ecc_level][mode]
+        max_len = rs["versions"]["1"]["capacities"][ecc_level][type_data]
         if (len_data > max_len):
             print("Overflow Len data")
             exit()
@@ -343,7 +343,7 @@ def get_ecc_level(mode, len_data):
 
     for i in range(4):
 
-        if (rs["versions"]["1"]["capacities"][list_ecc_level[i]][mode] > len_data):
+        if (rs["versions"]["1"]["capacities"][list_ecc_level[i]][type_data] > len_data):
             print("Level Error Code Correction: ", list_ecc_level[i])
             return list_ecc_level[i]
     
@@ -375,7 +375,7 @@ def num_encode(data):
 def alpha_encode(data):
 
     bit_message = []
-    alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
+    ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
     
     #For all the pair of char
     for i in range(0, len(data), 2):
@@ -383,14 +383,14 @@ def alpha_encode(data):
         string = data[i:i+2]
 
         if (len(string) == 2):
-            f = alphanumeric.find(data[i])
-            s = alphanumeric.find(data[i + 1])
+            f = ALPHANUMERIC.find(data[i])
+            s = ALPHANUMERIC.find(data[i + 1])
 
             num = (f * 45) + s
             bit_message.append(format(num, "011b"))
         
         else:
-            num = alphanumeric.find(data[i])
+            num = ALPHANUMERIC.find(data[i])
             bit_message.append(format(num, "06b"))
     
     print("Encode Data:", bit_message)
@@ -409,8 +409,8 @@ def byte_encode(data):
 
 def manage_data():
 
-    numeric = "0123456789"
-    alphanumeric = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
+    NUMERIC = "0123456789"
+    ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 
     data = input("Write something: ")
 
@@ -420,23 +420,23 @@ def manage_data():
     len_data = len(data)
 
     #Numeric
-    if all(digit in list(numeric) for digit in list(data)):
+    if all(digit in list(NUMERIC) for digit in list(data)):
 
         print("mode: numeric")
         bit_count = format(len_data, "010b")
         bit_message = num_encode(data)
-        mode = "numeric"
+        type_data = "numeric"
 
         #Add Mode Indicator & Character Count Indicator 
         bit_message.insert(0, "0001" + bit_count)
         
     #Alphanumeric
-    elif all(char in list(alphanumeric) for char in list(data)):
+    elif all(char in list(ALPHANUMERIC) for char in list(data)):
 
         print("mode: alphanumeric")
         bit_count = format(len_data, "09b")
         bit_message = alpha_encode(data)
-        mode = "alphanumeric"
+        type_data = "alphanumeric"
 
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0010" + bit_count)
@@ -446,14 +446,14 @@ def manage_data():
         print("mode: bit")
         bit_count = format(len_data, "08b")
         bit_message = byte_encode(data)  
-        mode = "byte"
+        type_data = "byte"
 
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0100" + bit_count)
 
     print("Mode Indicator: ", bit_message[0][:4])
     print("Character Count Indicator: ", bit_message)
-    return bit_message, data, mode
+    return bit_message, data, type_data
 
 def add_terminaison(bit_message, tt_num_codeword):
 
@@ -669,13 +669,19 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
     print("\nConvert theError Code Corrector to the log base")
     print("Error Code Corrector with Log: ", ecc)
 
+    #If len ECC is shorter than len ECC Block Size. Complete with 0 at the end
+    if (ecc.size < ecc_block_size):
+        ecc = np.append(ecc, np.zeros(ecc_block_size - len(ecc))).astype(dtype=int)
+        print("\nLen ECC is too short.")
+        print("Add ",  (ecc_block_size - len(ecc) * "0" , "to the end of the ECC"))
+        print("ECC: ", ecc)
+
     print("\nBit: ", [format(x, "08b") for x in ecc])
     print("Octal: ", [oct(octet) for octet in ecc])
     print("Hexa:  ", [hex(octet) for octet in ecc])
 
-    bit_message.extend(format(x, "08b") for x in ecc)
-
-    return (bit_message)
+    list_ecc = [format(x, "08b") for x in ecc]
+    return (list_ecc)
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -971,6 +977,12 @@ def data_masking(grid, ecc_level):
 
     return cp_grid
 
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
+# │              GET DATA FROM JSON FILE                    │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
 def get_rs_structure(ecc_level):
 
     with open("utils/qr_rs_structure.json", "r") as f:
@@ -995,8 +1007,8 @@ def get_rs_structure(ecc_level):
 def main():
 
     print_flag("Encode Data")
-    bit_message, data, mode = manage_data()
-    ecc_level = get_ecc_level(mode, len(data))
+    bit_message, data, type_data = manage_data()
+    ecc_level = get_ecc_level(type_data, len(data))
     tt_num_codeword, ecc_block_size, data_codewords_per_block = get_rs_structure(ecc_level)
     bit_message = add_terminaison(bit_message, tt_num_codeword)
     bit_message = convert_to_bytes(bit_message)
