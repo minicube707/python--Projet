@@ -1,44 +1,284 @@
 {
   "versions": {
-    "1": { "capacities": { "L": { "numeric": 41, "alphanumeric": 25, "byte": 17, "kanji": 10 }, "M": { "numeric": 34, "alphanumeric": 20, "byte": 14, "kanji": 8 }, "Q": { "numeric": 27, "alphanumeric": 16, "byte": 11, "kanji": 7 }, "H": { "numeric": 17, "alphanumeric": 10, "byte": 7, "kanji": 4 } } },
-    "2": { "capacities": { "L": { "numeric": 77, "alphanumeric": 47, "byte": 32, "kanji": 20 }, "M": { "numeric": 63, "alphanumeric": 38, "byte": 26, "kanji": 16 }, "Q": { "numeric": 48, "alphanumeric": 29, "byte": 20, "kanji": 12 }, "H": { "numeric": 34, "alphanumeric": 20, "byte": 14, "kanji": 8 } } },
-    "3": { "capacities": { "L": { "numeric": 127, "alphanumeric": 77, "byte": 53, "kanji": 32 }, "M": { "numeric": 101, "alphanumeric": 61, "byte": 42, "kanji": 26 }, "Q": { "numeric": 77, "alphanumeric": 47, "byte": 32, "kanji": 20 }, "H": { "numeric": 58, "alphanumeric": 35, "byte": 24, "kanji": 15 } } },
-    "4": { "capacities": { "L": { "numeric": 187, "alphanumeric": 114, "byte": 78, "kanji": 48 }, "M": { "numeric": 149, "alphanumeric": 90, "byte": 62, "kanji": 38 }, "Q": { "numeric": 111, "alphanumeric": 67, "byte": 46, "kanji": 28 }, "H": { "numeric": 82, "alphanumeric": 50, "byte": 34, "kanji": 21 } } },
-    "5": { "capacities": { "L": { "numeric": 255, "alphanumeric": 154, "byte": 106, "kanji": 65 }, "M": { "numeric": 202, "alphanumeric": 122, "byte": 84, "kanji": 52 }, "Q": { "numeric": 144, "alphanumeric": 87, "byte": 60, "kanji": 37 }, "H": { "numeric": 106, "alphanumeric": 64, "byte": 44, "kanji": 27 } } },
-    "6": { "capacities": { "L": { "numeric": 322, "alphanumeric": 195, "byte": 134, "kanji": 82 }, "M": { "numeric": 255, "alphanumeric": 154, "byte": 106, "kanji": 65 }, "Q": { "numeric": 178, "alphanumeric": 108, "byte": 74, "kanji": 45 }, "H": { "numeric": 139, "alphanumeric": 84, "byte": 58, "kanji": 36 } } },
-    "7": { "capacities": { "L": { "numeric": 370, "alphanumeric": 224, "byte": 154, "kanji": 95 }, "M": { "numeric": 293, "alphanumeric": 178, "byte": 125, "kanji": 75 }, "Q": { "numeric": 207, "alphanumeric": 125, "byte": 93, "kanji": 53 }, "H": { "numeric": 154, "alphanumeric": 122, "byte": 86, "kanji": 64 } } },
-    "8": { "capacities": { "L": { "numeric": 461, "alphanumeric": 365, "byte": 224, "kanji": 118 }, "M": { "numeric": 365, "alphanumeric": 279, "byte": 178, "kanji": 93 }, "Q": { "numeric": 259, "alphanumeric": 157, "byte": 125, "kanji": 66 }, "H": { "numeric": 202, "alphanumeric": 152, "byte": 108, "kanji": 84 } } },
-    "9": { "capacities": { "L": { "numeric": 552, "alphanumeric": 432, "byte": 279, "kanji": 141 }, "M": { "numeric": 432, "alphanumeric": 335, "byte": 262, "kanji": 111 }, "Q": { "numeric": 312, "alphanumeric": 189, "byte": 143, "kanji": 80 }, "H": { "numeric": 235, "alphanumeric": 180, "byte": 130, "kanji": 98 } } },
-    "10": { "capacities": { "L": { "numeric": 652, "alphanumeric": 513, "byte": 335, "kanji": 167 }, "M": { "numeric": 513, "alphanumeric": 395, "byte": 311, "kanji": 131 }, "Q": { "numeric": 364, "alphanumeric": 221, "byte": 174, "kanji": 93 }, "H": { "numeric": 288, "alphanumeric": 213, "byte": 151, "kanji": 119 } } },
-    "11": { "capacities": { "L": { "numeric": 772, "alphanumeric": 604, "byte": 468, "kanji": 198 }, "M": { "numeric": 604, "alphanumeric": 468, "byte": 366, "kanji": 155 }, "Q": { "numeric": 427, "alphanumeric": 259, "byte": 200, "kanji": 109 }, "H": { "numeric": 331, "alphanumeric": 200, "byte": 137, "kanji": 85 } } },
-    "12": { "capacities": { "L": { "numeric": 883, "alphanumeric": 691, "byte": 535, "kanji": 226 }, "M": { "numeric": 691, "alphanumeric": 535, "byte": 419, "kanji": 177 }, "Q": { "numeric": 489, "alphanumeric": 296, "byte": 227, "kanji": 125 }, "H": { "numeric": 374, "alphanumeric": 419, "byte": 155, "kanji": 96 } } },
-    "13": { "capacities": { "L": { "numeric": 1022, "alphanumeric": 796, "byte": 619, "kanji": 262 }, "M": { "numeric": 796, "alphanumeric": 619, "byte": 483, "kanji": 204 }, "Q": { "numeric": 580, "alphanumeric": 352, "byte": 259, "kanji": 149 }, "H": { "numeric": 427, "alphanumeric": 331, "byte": 177, "kanji": 109 } } },
-    "14": { "capacities": { "L": { "numeric": 1101, "alphanumeric": 871, "byte": 667, "kanji": 282 }, "M": { "numeric": 871, "alphanumeric": 667, "byte": 528, "kanji": 362 }, "Q": { "numeric": 621, "alphanumeric": 376, "byte": 283, "kanji": 159 }, "H": { "numeric": 468, "alphanumeric": 362, "byte": 194, "kanji": 120 } } },
-    "15": { "capacities": { "L": { "numeric": 1250, "alphanumeric": 991, "byte": 758, "kanji": 320 }, "M": { "numeric": 991, "alphanumeric": 758, "byte": 600, "kanji": 254 }, "Q": { "numeric": 703, "alphanumeric": 426, "byte": 321, "kanji": 180 }, "H": { "numeric": 530, "alphanumeric": 412, "byte": 220, "kanji": 136 } } },
-    "16": { "capacities": { "L": { "numeric": 1408, "alphanumeric": 1082, "byte": 854, "kanji": 361 }, "M": { "numeric": 1111, "alphanumeric": 852, "byte": 673, "kanji": 283 }, "Q": { "numeric": 775, "alphanumeric": 471, "byte": 364, "kanji": 200 }, "H": { "numeric": 602, "alphanumeric": 457, "byte": 288, "kanji": 154 } } },
-    "17": { "capacities": { "L": { "numeric": 1548, "alphanumeric": 1212, "byte": 938, "kanji": 397 }, "M": { "numeric": 1220, "alphanumeric": 936, "byte": 734, "kanji": 313 }, "Q": { "numeric": 876, "alphanumeric": 531, "byte": 416, "kanji": 228 }, "H": { "numeric": 674, "alphanumeric": 518, "byte": 318, "kanji": 173 } } },
-    "18": { "capacities": { "L": { "numeric": 1725, "alphanumeric": 1346, "byte": 1046, "kanji": 442 }, "M": { "numeric": 1358, "alphanumeric": 1046, "byte": 816, "kanji": 344 }, "Q": { "numeric": 948, "alphanumeric": 574, "byte": 452, "kanji": 248 }, "H": { "numeric": 746, "alphanumeric": 572, "byte": 353, "kanji": 191 } } },
-    "19": { "capacities": { "L": { "numeric": 1903, "alphanumeric": 1500, "byte": 1153, "kanji": 488 }, "M": { "numeric": 1500, "alphanumeric": 1153, "byte": 909, "kanji": 382 }, "Q": { "numeric": 1063, "alphanumeric": 644, "byte": 493, "kanji": 270 }, "H": { "numeric": 813, "alphanumeric": 644, "byte": 388, "kanji": 208 } } },
-    "20": { "capacities": { "L": { "numeric": 2061, "alphanumeric": 1600, "byte": 1249, "kanji": 528 }, "M": { "numeric": 1600, "alphanumeric": 1249, "byte": 970, "kanji": 410 }, "Q": { "numeric": 1159, "alphanumeric": 702, "byte": 557, "kanji": 302 }, "H": { "numeric": 919, "alphanumeric": 702, "byte": 442, "kanji": 235 } } },
-    "21": { "capacities": { "L": { "numeric": 2232, "alphanumeric": 1708, "byte": 1352, "kanji": 572 }, "M": { "numeric": 1708, "alphanumeric": 1352, "byte": 1050, "kanji": 438 }, "Q": { "numeric": 1224, "alphanumeric": 742, "byte": 587, "kanji": 322 }, "H": { "numeric": 969, "alphanumeric": 742, "byte": 509, "kanji": 262 } } },
-    "22": { "capacities": { "L": { "numeric": 2409, "alphanumeric": 1872, "byte": 1460, "kanji": 618 }, "M": { "numeric": 1872, "alphanumeric": 1460, "byte": 1132, "kanji": 466 }, "Q": { "numeric": 1358, "alphanumeric": 823, "byte": 640, "kanji": 354 }, "H": { "numeric": 1056, "alphanumeric": 823, "byte": 565, "kanji": 292 } } },
-    "23": { "capacities": { "L": { "numeric": 2620, "alphanumeric": 2059, "byte": 1588, "kanji": 672 }, "M": { "numeric": 2059, "alphanumeric": 1588, "byte": 1236, "kanji": 514 }, "Q": { "numeric": 1468, "alphanumeric": 890, "byte": 672, "kanji": 370 }, "H": { "numeric": 1108, "alphanumeric": 890, "byte": 611, "kanji": 322 } } },
-    "24": { "capacities": { "L": { "numeric": 2812, "alphanumeric": 2188, "byte": 1704, "kanji": 721 }, "M": { "numeric": 2188, "alphanumeric": 1704, "byte": 1326, "kanji": 550 }, "Q": { "numeric": 1588, "alphanumeric": 963, "byte": 744, "kanji": 410 }, "H": { "numeric": 1228, "alphanumeric": 963, "byte": 661, "kanji": 370 } } },
-    "25": { "capacities": { "L": { "numeric": 3057, "alphanumeric": 2395, "byte": 1853, "kanji": 784 }, "M": { "numeric": 2395, "alphanumeric": 1853, "byte": 1451, "kanji": 605 }, "Q": { "numeric": 1718, "alphanumeric": 1041, "byte": 779, "kanji": 430 }, "H": { "numeric": 1286, "alphanumeric": 1041, "byte": 715, "kanji": 402 } } },
-    "26": { "capacities": { "L": { "numeric": 3283, "alphanumeric": 2544, "byte": 1990, "kanji": 842 }, "M": { "numeric": 2544, "alphanumeric": 1990, "byte": 1542, "kanji": 647 }, "Q": { "numeric": 1804, "alphanumeric": 1094, "byte": 864, "kanji": 476 }, "H": { "numeric": 1425, "alphanumeric": 1094, "byte": 751, "kanji": 427 } } },
-    "27": { "capacities": { "L": { "numeric": 3517, "alphanumeric": 2701, "byte": 2132, "kanji": 902 }, "M": { "numeric": 2701, "alphanumeric": 2132, "byte": 1637, "kanji": 673 }, "Q": { "numeric": 1933, "alphanumeric": 1172, "byte": 910, "kanji": 504 }, "H": { "numeric": 1501, "alphanumeric": 1172, "byte": 805, "kanji": 459 } } },  
-    "28": { "capacities": { "L": { "numeric": 3669, "alphanumeric": 2857, "byte": 2223, "kanji": 940 }, "M": { "numeric": 2857, "alphanumeric": 2223, "byte": 1732, "kanji": 714 }, "Q": { "numeric": 2085, "alphanumeric": 1263, "byte": 958, "kanji": 531 }, "H": { "numeric": 1581, "alphanumeric": 1263, "byte": 868, "kanji": 493 } } },
-    "29": { "capacities": { "L": { "numeric": 3909, "alphanumeric": 3035, "byte": 2369, "kanji": 1002 }, "M": { "numeric": 3035, "alphanumeric": 2369, "byte": 1839, "kanji": 755 }, "Q": { "numeric": 2181, "alphanumeric": 1322, "byte": 1016, "kanji": 559 }, "H": { "numeric": 1677, "alphanumeric": 1322, "byte": 908, "kanji": 531 } } },
-    "30": { "capacities": { "L": { "numeric": 4158, " alphanumeric": 3289, "byte": 2520, "kanji": 1066 }, "M": { "numeric": 3289, "alphanumeric": 1994, "byte": 1994, "kanji": 843 }, "Q": { "numeric": 2358, "alphanumeric": 1430, "byte": 1429, "kanji": 742 }, "H": { "numeric": 1782, "alphanumeric": 1080, "byte": 1080, "kanji": 457 } } },
-    "31": { "capacities": { "L": { "numeric": 4417, " alphanumeric": 3486, "byte": 2677, "kanji": 1132 }, "M": { "numeric": 3486, "alphanumeric": 3111, "byte": 2238, "kanji": 894 }, "Q": { "numeric": 2473, "alphanumeric": 1499, "byte": 1499, "kanji": 634 }, "H": { "numeric": 1897, "alphanumeric": 1150, "byte": 1150, "kanji": 486 } } },
-    "32": { "capacities": { "L": { "numeric": 4686, " alphanumeric": 3693, "byte": 2840, "kanji": 1201 }, "M": { "numeric": 3693, "alphanumeric": 2238, "byte": 2238, "kanji": 947 }, "Q": { "numeric": 2670, "alphanumeric": 1618, "byte": 1618, "kanji": 684 }, "H": { "numeric": 2022, "alphanumeric": 1226, "byte": 1226, "kanji": 518 } } },
-    "33": { "capacities": { "L": { "numeric": 4965, " alphanumeric": 3909, "byte": 3009, "kanji": 1273 }, "M": { "numeric": 3909, "alphanumeric": 2369, "byte": 2369, "kanji": 1002 }, "Q": { "numeric": 2805, "alphanumeric": 1700, "byte": 1700, "kanji": 719 }, "H": { "numeric": 2157, "alphanumeric": 1307, "byte": 1307, "kanji": 553 } } },
-    "34": { "capacities": { "L": { "numeric": 5253, " alphanumeric": 4134, "byte": 3183, "kanji": 1347 }, "M": { "numeric": 4134, "alphanumeric": 2506, "byte": 2506, "kanji": 1060 }, "Q": { "numeric": 2949, "alphanumeric": 1787, "byte": 1787, "kanji": 756 }, "H": { "numeric": 2301, "alphanumeric": 1394, "byte": 1394, "kanji": 590 } } },
-    "35": { "capacities": { "L": { "numeric": 5529, " alphanumeric": 4343, "byte": 3351, "kanji": 1417 }, "M": { "numeric": 4343, "alphanumeric": 2632, "byte": 2632, "kanji": 1113 }, "Q": { "numeric": 3081, "alphanumeric": 1867, "byte": 1867, "kanji": 790 }, "H": { "numeric": 2361, "alphanumeric": 1431, "byte": 1431, "kanji": 605 } } },
-    "36": { "capacities": { "L": { "numeric": 5836, " alphanumeric": 4588, "byte": 3537, "kanji": 1496 }, "M": { "numeric": 4588, "alphanumeric": 2780, "byte": 2780, "kanji": 1176 }, "Q": { "numeric": 3244, "alphanumeric": 1966, "byte": 1966, "kanji": 832 }, "H": { "numeric": 2524, "alphanumeric": 1530, "byte": 1530, "kanji": 647 } } },
-    "37": { "capacities": { "L": { "numeric": 6153, " alphanumeric": 4775, "byte": 3729, "kanji": 1577 }, "M": { "numeric": 4775, "alphanumeric": 2894, "byte": 2894, "kanji": 1224 }, "Q": { "numeric": 3417, "alphanumeric": 2071, "byte": 2071, "kanji": 876 }, "H": { "numeric": 2625, "alphanumeric": 1591, "byte": 1591, "kanji": 673 } } },
-    "38": { "capacities": { "L": { "numeric": 6479, " alphanumeric": 5039, "byte": 3927, "kanji": 1661 }, "M": { "numeric": 5039, "alphanumeric": 3054, "byte": 3054, "kanji": 1292 }, "Q": { "numeric": 3599, "alphanumeric": 2181, "byte": 2181, "kanji": 923 }, "H": { "numeric": 2735, "alphanumeric": 1658, "byte": 1658, "kanji": 701 } } },
-    "39": { "capacities": { "L": { "numeric": 6743, " alphanumeric": 5313, "byte": 4087, "kanji": 1729 }, "M": { "numeric": 5313, "alphanumeric": 3220, "byte": 3220, "kanji": 1362 }, "Q": { "numeric": 3791, "alphanumeric": 2298, "byte": 2298, "kanji": 972 }, "H": { "numeric": 2927, "alphanumeric": 1774, "byte": 1774, "kanji": 750 } } },
-    "40": { "capacities": { "L": { "numeric": 7089, " alphanumeric": 4296, "byte": 2953, "kanji": 1817 }, "M": { "numeric": 5596, "alphanumeric": 3391, "byte": 2331, "kanji": 1435 }, "Q": { "numeric": 3993, "alphanumeric": 2420, "byte": 2420, "kanji": 1024 }, "H": { "numeric": 3057, "alphanumeric": 3057, "byte": 1663, "kanji": 784 } } }
+    "1": { "capacities": { 
+      "L": { "numeric": 41, "alphanumeric": 25, "byte": 17, "kanji": 10 }, 
+      "M": { "numeric": 34, "alphanumeric": 20, "byte": 14, "kanji": 8 }, 
+      "Q": { "numeric": 27, "alphanumeric": 16, "byte": 11, "kanji": 7 }, 
+      "H": { "numeric": 17, "alphanumeric": 10, "byte": 7, "kanji": 4 } 
+      } 
+    },
+    "2": { "capacities": { 
+      "L": { "numeric": 77, "alphanumeric": 47, "byte": 32, "kanji": 20 }, 
+      "M": { "numeric": 63, "alphanumeric": 38, "byte": 26, "kanji": 16 }, 
+      "Q": { "numeric": 48, "alphanumeric": 29, "byte": 20, "kanji": 12 }, 
+      "H": { "numeric": 34, "alphanumeric": 20, "byte": 14, "kanji": 8 } 
+      } 
+    },
+    "3": { "capacities": { 
+      "L": { "numeric": 127, "alphanumeric": 77, "byte": 53, "kanji": 32 }, 
+      "M": { "numeric": 101, "alphanumeric": 61, "byte": 42, "kanji": 26 }, 
+      "Q": { "numeric": 77, "alphanumeric": 47, "byte": 32, "kanji": 20 }, 
+      "H": { "numeric": 58, "alphanumeric": 35, "byte": 24, "kanji": 15 } 
+      } 
+    },
+    "4": { "capacities": { 
+      "L": { "numeric": 187, "alphanumeric": 114, "byte": 78, "kanji": 48 }, 
+      "M": { "numeric": 149, "alphanumeric": 90, "byte": 62, "kanji": 38 }, 
+      "Q": { "numeric": 111, "alphanumeric": 67, "byte": 46, "kanji": 28 }, 
+      "H": { "numeric": 82, "alphanumeric": 50, "byte": 34, "kanji": 21 } 
+      } 
+    },
+    "5": { "capacities": { 
+      "L": { "numeric": 255, "alphanumeric": 154, "byte": 106, "kanji": 65 }, 
+      "M": { "numeric": 202, "alphanumeric": 122, "byte": 84, "kanji": 52 }, 
+      "Q": { "numeric": 144, "alphanumeric": 87, "byte": 60, "kanji": 37 }, 
+      "H": { "numeric": 106, "alphanumeric": 64, "byte": 44, "kanji": 27 }
+      } 
+    },
+    "6": { "capacities": { 
+      "L": { "numeric": 322, "alphanumeric": 195, "byte": 134, "kanji": 82 },
+      "M": { "numeric": 255, "alphanumeric": 154, "byte": 106, "kanji": 65 }, 
+      "Q": { "numeric": 178, "alphanumeric": 108, "byte": 74, "kanji": 45 }, 
+      "H": { "numeric": 139, "alphanumeric": 84, "byte": 58, "kanji": 36 } 
+      } 
+    },
+    "7": { "capacities": { 
+      "L": { "numeric": 370, "alphanumeric": 224, "byte": 154, "kanji": 95 }, 
+      "M": { "numeric": 293, "alphanumeric": 178, "byte": 125, "kanji": 75 }, 
+      "Q": { "numeric": 207, "alphanumeric": 125, "byte": 86, "kanji": 53 }, 
+      "H": { "numeric": 154, "alphanumeric": 93, "byte": 64, "kanji": 39 } 
+      } 
+    },
+    "8": { "capacities": { 
+      "L": { "numeric": 461, "alphanumeric": 279, "byte": 192, "kanji": 118 }, 
+      "M": { "numeric": 365, "alphanumeric": 221, "byte": 152, "kanji": 93 }, 
+      "Q": { "numeric": 259, "alphanumeric": 157, "byte": 108, "kanji": 66 }, 
+      "H": { "numeric": 202, "alphanumeric": 122, "byte": 84, "kanji": 52 } 
+      } 
+    },
+    "9": { "capacities": { 
+      "L": { "numeric": 552, "alphanumeric": 335, "byte": 230, "kanji": 141 },
+      "M": { "numeric": 432, "alphanumeric": 262, "byte": 180, "kanji": 111 }, 
+      "Q": { "numeric": 312, "alphanumeric": 189, "byte": 130, "kanji": 80 }, 
+      "H": { "numeric": 235, "alphanumeric": 143, "byte": 98, "kanji": 60 }
+      } 
+    },
+    "10": { "capacities": { 
+      "L": { "numeric": 652, "alphanumeric": 395, "byte": 271, "kanji": 167 }, 
+      "M": { "numeric": 513, "alphanumeric": 311, "byte": 213, "kanji": 131 }, 
+      "Q": { "numeric": 364, "alphanumeric": 221, "byte": 151, "kanji": 93 }, 
+      "H": { "numeric": 288, "alphanumeric": 174, "byte": 119, "kanji": 74 } 
+      } 
+    },
+    "11": { "capacities": { 
+      "L": { "numeric": 772, "alphanumeric": 468, "byte": 321, "kanji": 198 }, 
+      "M": { "numeric": 604, "alphanumeric": 366, "byte": 251, "kanji": 155 }, 
+      "Q": { "numeric": 427, "alphanumeric": 259, "byte": 177, "kanji": 109 }, 
+      "H": { "numeric": 331, "alphanumeric": 200, "byte": 137, "kanji": 85 } 
+      } 
+    },
+    "12": { "capacities": { 
+      "L": { "numeric": 883, "alphanumeric": 535, "byte": 367, "kanji": 226 }, 
+      "M": { "numeric": 691, "alphanumeric": 419, "byte": 287, "kanji": 177 }, 
+      "Q": { "numeric": 489, "alphanumeric": 296, "byte": 203, "kanji": 125 }, 
+      "H": { "numeric": 374, "alphanumeric": 227, "byte": 155, "kanji": 96 } 
+      } 
+    },
+    "13": { "capacities": { 
+      "L": { "numeric": 1022, "alphanumeric": 619, "byte": 425, "kanji": 262 }, 
+      "M": { "numeric": 796, "alphanumeric": 483, "byte": 331, "kanji": 204 }, 
+      "Q": { "numeric": 580, "alphanumeric": 352, "byte": 241, "kanji": 149 }, 
+      "H": { "numeric": 427, "alphanumeric": 259, "byte": 177, "kanji": 109 } 
+      } 
+    },
+    "14": { "capacities": { 
+      "L": { "numeric": 1101, "alphanumeric": 667, "byte": 458, "kanji": 282 }, 
+      "M": { "numeric": 871, "alphanumeric": 528, "byte": 362, "kanji": 223 }, 
+      "Q": { "numeric": 621, "alphanumeric": 376, "byte": 258, "kanji": 159 }, 
+      "H": { "numeric": 468, "alphanumeric": 283, "byte": 194, "kanji": 120 } 
+      } 
+    },
+    "15": { "capacities": { 
+      "L": { "numeric": 1250, "alphanumeric": 758, "byte": 520, "kanji": 320 }, 
+      "M": { "numeric": 991, "alphanumeric": 600, "byte": 412, "kanji": 254 }, 
+      "Q": { "numeric": 703, "alphanumeric": 426, "byte": 292, "kanji": 180 }, 
+      "H": { "numeric": 530, "alphanumeric": 321, "byte": 220, "kanji": 136 } 
+      } 
+    },
+    "16": { "capacities": { 
+      "L": { "numeric": 1408, "alphanumeric": 854, "byte": 586, "kanji": 361 }, 
+      "M": { "numeric": 1082, "alphanumeric": 656, "byte": 450, "kanji": 277 }, 
+      "Q": { "numeric": 775, "alphanumeric": 470, "byte": 322, "kanji": 198 }, 
+      "H": { "numeric": 602, "alphanumeric": 365, "byte": 250, "kanji": 154 } 
+      } 
+    },
+    "17": { "capacities": { 
+      "L": { "numeric": 1548, "alphanumeric": 938, "byte": 644, "kanji": 397 }, 
+      "M": { "numeric": 1212, "alphanumeric": 734, "byte": 504, "kanji": 310 }, 
+      "Q": { "numeric": 876, "alphanumeric": 531, "byte": 364, "kanji": 224 }, 
+      "H": { "numeric": 674, "alphanumeric": 408, "byte": 280, "kanji": 173 } 
+      } 
+    },
+    "18": { "capacities": { 
+      "L": { "numeric": 1725, "alphanumeric": 1046, "byte": 718, "kanji": 442 }, 
+      "M": { "numeric": 1346, "alphanumeric": 816, "byte": 560, "kanji": 345 }, 
+      "Q": { "numeric": 948, "alphanumeric": 574, "byte": 394, "kanji": 243 }, 
+      "H": { "numeric": 746, "alphanumeric": 452, "byte": 310, "kanji": 191 } 
+      } 
+    },
+    "19": { "capacities": { 
+      "L": { "numeric": 1903, "alphanumeric": 1153, "byte": 792, "kanji": 488 }, 
+      "M": { "numeric": 1500, "alphanumeric": 909, "byte": 624, "kanji": 384 }, 
+      "Q": { "numeric": 1063, "alphanumeric": 644, "byte": 442, "kanji": 272 }, 
+      "H": { "numeric": 813, "alphanumeric": 493 , "byte": 388, "kanji": 208 } 
+      } 
+    },
+    "20": { "capacities": { 
+      "L": { "numeric": 2061, "alphanumeric": 1249, "byte": 858, "kanji": 528 }, 
+      "M": { "numeric": 1600, "alphanumeric": 970, "byte": 666, "kanji": 410 }, 
+      "Q": { "numeric": 1159, "alphanumeric": 702, "byte": 482, "kanji": 297 }, 
+      "H": { "numeric": 919, "alphanumeric": 557, "byte": 382, "kanji": 235 } 
+      } 
+    },
+    "21": { "capacities": { 
+      "L": { "numeric": 2232, "alphanumeric": 1352, "byte": 929, "kanji": 572 }, 
+      "M": { "numeric": 1708, "alphanumeric": 1035, "byte": 711, "kanji": 438 }, 
+      "Q": { "numeric": 1224, "alphanumeric": 742, "byte": 509, "kanji": 314 }, 
+      "H": { "numeric": 969, "alphanumeric": 587, "byte": 403, "kanji": 248 } 
+      } 
+    },
+    "22": { "capacities": { 
+      "L": { "numeric": 2409, "alphanumeric": 1460, "byte": 1003, "kanji": 618 }, 
+      "M": { "numeric": 1872, "alphanumeric": 1134, "byte": 779, "kanji": 480 }, 
+      "Q": { "numeric": 1358, "alphanumeric": 823, "byte": 565, "kanji": 348 }, 
+      "H": { "numeric": 1056, "alphanumeric": 640, "byte": 439, "kanji": 270 } 
+      } 
+    },
+    "23": { "capacities": { 
+      "L": { "numeric": 2620, "alphanumeric": 1588, "byte": 1091, "kanji": 672 }, 
+      "M": { "numeric": 2059, "alphanumeric": 1248, "byte": 857, "kanji": 528 }, 
+      "Q": { "numeric": 1468, "alphanumeric": 890, "byte": 611, "kanji": 376 }, 
+      "H": { "numeric": 1108, "alphanumeric": 672, "byte": 461, "kanji": 284 } 
+      } 
+    },
+    "24": { "capacities": { 
+      "L": { "numeric": 2812, "alphanumeric": 1704, "byte": 1171, "kanji": 721 }, 
+      "M": { "numeric": 2188, "alphanumeric": 1326, "byte": 911, "kanji": 561 }, 
+      "Q": { "numeric": 1588, "alphanumeric": 963, "byte": 661, "kanji": 407 }, 
+      "H": { "numeric": 1228, "alphanumeric": 744, "byte": 511, "kanji": 315 } 
+      } 
+    },
+    "25": { "capacities": { 
+      "L": { "numeric": 3057, "alphanumeric": 1853, "byte": 1273, "kanji": 784 }, 
+      "M": { "numeric": 2395, "alphanumeric": 1451, "byte": 997, "kanji": 614 }, 
+      "Q": { "numeric": 1718, "alphanumeric": 1041, "byte": 715, "kanji": 440 }, 
+      "H": { "numeric": 1286, "alphanumeric": 779, "byte": 535, "kanji": 330 } 
+      } 
+    },
+    "26": { "capacities": { 
+      "L": { "numeric": 3283, "alphanumeric": 1990, "byte": 1367, "kanji": 842 }, 
+      "M": { "numeric": 2544, "alphanumeric": 1542, "byte": 1059, "kanji": 652 },
+      "Q": { "numeric": 1804, "alphanumeric": 1094, "byte": 751, "kanji": 462 }, 
+      "H": { "numeric": 1425, "alphanumeric": 864, "byte": 593, "kanji": 365 } 
+      } 
+    },
+    "27": { "capacities": { 
+      "L": { "numeric": 3517, "alphanumeric": 2132, "byte": 1465, "kanji": 902 }, 
+      "M": { "numeric": 2701, "alphanumeric": 1637, "byte": 1125, "kanji": 692 }, 
+      "Q": { "numeric": 1933, "alphanumeric": 1172, "byte": 805, "kanji": 496 }, 
+      "H": { "numeric": 1501, "alphanumeric": 910, "byte": 625, "kanji": 385 } 
+      } 
+    },  
+    "28": { "capacities": { 
+      "L": { "numeric": 3669, "alphanumeric": 2223, "byte": 1528, "kanji": 940 }, 
+      "M": { "numeric": 2857, "alphanumeric": 1732, "byte": 1190, "kanji": 732 }, 
+      "Q": { "numeric": 2085, "alphanumeric": 1263, "byte": 868, "kanji": 534 }, 
+      "H": { "numeric": 1581, "alphanumeric": 958, "byte": 658, "kanji": 405 } 
+      } 
+    },
+    "29": { "capacities": { 
+      "L": { "numeric": 3909, "alphanumeric": 2369, "byte": 1628, "kanji": 1002 }, 
+      "M": { "numeric": 3035, "alphanumeric": 1839, "byte": 1264, "kanji": 778 }, 
+      "Q": { "numeric": 2181, "alphanumeric": 1322, "byte": 908, "kanji": 559 }, 
+      "H": { "numeric": 1677, "alphanumeric": 1016, "byte": 698, "kanji": 430 } 
+      } 
+    },
+    "30": { "capacities": { 
+      "L": { "numeric": 4158, " alphanumeric": 2520, "byte": 1732, "kanji": 1066 }, 
+      "M": { "numeric": 3289, "alphanumeric": 1994, "byte": 1370, "kanji": 843 }, 
+      "Q": { "numeric": 2358, "alphanumeric": 1429, "byte": 982, "kanji": 604 }, 
+      "H": { "numeric": 1782, "alphanumeric": 1080, "byte": 742, "kanji": 457 } 
+      } 
+    },
+    "31": { "capacities": { 
+      "L": { "numeric": 4417, " alphanumeric": 2677, "byte": 1840, "kanji": 1132 }, 
+      "M": { "numeric": 3486, "alphanumeric": 2113, "byte": 1452, "kanji": 894 }, 
+      "Q": { "numeric": 2473, "alphanumeric": 1499, "byte": 1030, "kanji": 634 }, 
+      "H": { "numeric": 1897, "alphanumeric": 1150, "byte": 790, "kanji": 486 } 
+      } 
+    },
+    "32": { "capacities": { 
+      "L": { "numeric": 4686, " alphanumeric": 2840, "byte": 1952, "kanji": 1201 }, 
+      "M": { "numeric": 3693, "alphanumeric": 2238, "byte": 1538, "kanji": 947 }, 
+      "Q": { "numeric": 2670, "alphanumeric": 1618, "byte": 1112, "kanji": 684 }, 
+      "H": { "numeric": 2022, "alphanumeric": 1226, "byte": 842, "kanji": 518 } 
+      } 
+    },
+    "33": { "capacities": { 
+      "L": { "numeric": 4965, " alphanumeric": 3009, "byte": 2068, "kanji": 1273 }, 
+      "M": { "numeric": 3909, "alphanumeric": 2369, "byte": 1628, "kanji": 1002 }, 
+      "Q": { "numeric": 2805, "alphanumeric": 1700, "byte": 1168, "kanji": 719 }, 
+      "H": { "numeric": 2157, "alphanumeric": 1307, "byte": 898, "kanji": 553 } 
+      } 
+    },
+    "34": { "capacities": { 
+      "L": { "numeric": 5253, " alphanumeric": 3183, "byte": 2188, "kanji": 1347 }, 
+      "M": { "numeric": 4134, "alphanumeric": 2506, "byte": 1722, "kanji": 1060 }, 
+      "Q": { "numeric": 2949, "alphanumeric": 1787, "byte": 1228, "kanji": 756 },
+      "H": { "numeric": 2301, "alphanumeric": 1394, "byte": 958, "kanji": 590 } 
+      } 
+    },
+    "35": { "capacities": { 
+      "L": { "numeric": 5529, " alphanumeric": 3351, "byte": 2303, "kanji": 1417 }, 
+      "M": { "numeric": 4343, "alphanumeric": 2632, "byte": 1809, "kanji": 1113 }, 
+      "Q": { "numeric": 3081, "alphanumeric": 1867, "byte": 1283, "kanji": 790 }, 
+      "H": { "numeric": 2361, "alphanumeric": 1431, "byte": 983, "kanji": 605 } 
+      } 
+    },
+    "36": { "capacities": { 
+      "L": { "numeric": 5836, " alphanumeric": 3537, "byte": 2431, "kanji": 1496 }, 
+      "M": { "numeric": 4588, "alphanumeric": 2780, "byte": 1911, "kanji": 1176 }, 
+      "Q": { "numeric": 3244, "alphanumeric": 1966, "byte": 1351, "kanji": 832 }, 
+      "H": { "numeric": 2524, "alphanumeric": 1530, "byte": 1051, "kanji": 647 } 
+      } 
+    },
+    "37": { "capacities": { 
+      "L": { "numeric": 6153, " alphanumeric": 3729, "byte": 2563, "kanji": 1577 }, 
+      "M": { "numeric": 4775, "alphanumeric": 2894, "byte": 1989, "kanji": 1224 }, 
+      "Q": { "numeric": 3417, "alphanumeric": 2071, "byte": 1423, "kanji": 876 },
+      "H": { "numeric": 2625, "alphanumeric": 1591, "byte": 1093, "kanji": 673 }
+      }  
+    },
+    "38": { "capacities": { 
+      "L": { "numeric": 6479, " alphanumeric": 3927, "byte": 2699, "kanji": 1661 }, 
+      "M": { "numeric": 5039, "alphanumeric": 3054, "byte": 2099, "kanji": 1292 }, 
+      "Q": { "numeric": 3599, "alphanumeric": 2181, "byte": 1499, "kanji": 923 }, 
+      "H": { "numeric": 2735, "alphanumeric": 1658, "byte": 1139, "kanji": 701 } 
+      } 
+    },
+    "39": { "capacities": { 
+      "L": { "numeric": 6743, " alphanumeric": 4087, "byte": 2809, "kanji": 1729 }, 
+      "M": { "numeric": 5313, "alphanumeric": 3220, "byte": 2213, "kanji": 1362 }, 
+      "Q": { "numeric": 3791, "alphanumeric": 2298, "byte": 1579, "kanji": 972 }, 
+      "H": { "numeric": 2927, "alphanumeric": 1774, "byte": 1219, "kanji": 750 } 
+      } 
+    },
+    "40": { "capacities": { 
+      "L": { "numeric": 7089, " alphanumeric": 4296, "byte": 2953, "kanji": 1817 }, 
+      "M": { "numeric": 5596, "alphanumeric": 3391, "byte": 2331, "kanji": 1435 }, 
+      "Q": { "numeric": 3993, "alphanumeric": 2420, "byte": 1663, "kanji": 1024 }, 
+      "H": { "numeric": 3057, "alphanumeric": 1852, "byte": 1273, "kanji": 784 } 
+      } 
+    }
   }
 }
