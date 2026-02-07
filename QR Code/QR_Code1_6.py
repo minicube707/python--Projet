@@ -218,7 +218,7 @@ def add_forbiden_node_timing_pattern(forbidden, N):
 def add_forbiden_node_alignement_pattern(forbidden, N, qr_level):
 
     #No Alignement Pattern for QR Code level 1
-    if int(qr_level == 1):
+    if int(qr_level) == 1:
         return forbidden
     
     #If the QR Code level is between 2 and 6
@@ -360,7 +360,7 @@ def add_remainder_bit(bit_message, qr_level):
 
     #If the QR Code level 1.
     #Add 0 0s
-    if (int(qr_level == 1)):
+    if (int(qr_level) == 1):
         return bit_message
     
     #If the QR Code level is between 2 and 6.
@@ -380,7 +380,7 @@ def check_input():
     correct_ecc_level = False
     correct_qr_level =  False
 
-    while(not correct_ecc_level and not correct_qr_level):
+    while(not correct_ecc_level or not correct_qr_level):
         
         if (not correct_ecc_level):
             ecc_level = input("\nWhich level of Encryption do you want ?:\n")
@@ -411,10 +411,10 @@ def ecc_qr_level_defined(rs, ecc_level, qr_level, type_data, len_data):
     #Check if the data isn't longer than the lenght max for a error code correction
     max_len = rs["versions"][qr_level]["capacities"][ecc_level][type_data]
     if (len_data > max_len):
-        print("Overflow Len data")
+        print("\nOverflow Len data")
         exit()
 
-    print("Level Error Code Correction: ", ecc_level)
+    print("\nLevel Error Code Correction: ", ecc_level)
     print("Level of the QR Code: ", qr_level)
     return  ecc_level, qr_level
 
@@ -426,11 +426,11 @@ def ecc_level_undefined(rs, qr_level, type_data, len_data):
     for i in range(4):
 
         if (rs["versions"][qr_level]["capacities"][list_ecc_level[i]][type_data] > len_data):
-            print("Level Error Code Correction: ", list_ecc_level[i])
+            print("\nLevel Error Code Correction: ", list_ecc_level[i])
             print("Level of the QR Code: ", qr_level)
             return list_ecc_level[i], qr_level
     
-    print("Overflow Len data")
+    print("\nOverflow Len data")
     exit()
 
 def qr_level_undefined(rs, ecc_level, type_data, len_data):
@@ -439,26 +439,26 @@ def qr_level_undefined(rs, ecc_level, type_data, len_data):
     for i in range(1, 7):
 
         if (rs["versions"][str(i)]["capacities"][ecc_level][type_data] > len_data):
-            print("Level Error Code Correction: ", ecc_level)
+            print("\nLevel Error Code Correction: ", ecc_level)
             print("Level of the QR Code: ", str(i))
             return ecc_level, str(i)
     
-    print("Overflow Len data")
+    print("\nOverflow Len data")
     exit()
 
 def ecc_qr_level_undefined(rs, type_data, len_data):
 
     list_ecc_level =  ["H", "Q", "M", "L"]
 
-    for i in range(1, 3):
+    for i in range(1, 7):
         for j in range(4):
 
             if (rs["versions"][str(i)]["capacities"][list_ecc_level[j]][type_data] > len_data):
-                print("Level Error Code Correction: ", list_ecc_level[j])
+                print("\nLevel Error Code Correction: ", list_ecc_level[j])
                 print("Level of the QR Code: ", str(i))
                 return list_ecc_level[j], str(i)
     
-    print("Overflow Len data")
+    print("\nOverflow Len data")
     exit()
 
 def get_ecc_level(type_data, len_data):
@@ -913,9 +913,6 @@ def apply_mask_0(grid, qr_level):
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
 
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
-
     return grid
 
 #(row) mod 2 == 0
@@ -929,9 +926,6 @@ def apply_mask_1(grid, qr_level):
 
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
 
     return grid
 
@@ -947,9 +941,6 @@ def apply_mask_2(grid, qr_level):
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
 
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
-
     return grid
 
 #(row + column) mod 3 == 0
@@ -964,9 +955,6 @@ def apply_mask_3(grid, qr_level):
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
 
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
-
     return grid
 
 #( floor(row / 2) + floor(column / 3) ) mod 2 == 0
@@ -980,9 +968,6 @@ def apply_mask_4(grid, qr_level):
 
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
 
     return grid
 
@@ -999,9 +984,6 @@ def apply_mask_5(grid, qr_level):
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
 
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
-
     return grid
 
 #( ((row * column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
@@ -1017,9 +999,6 @@ def apply_mask_6(grid, qr_level):
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
 
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
-
     return grid
 
 #( ((row + column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
@@ -1034,9 +1013,6 @@ def apply_mask_7(grid, qr_level):
 
     # Flip bits where mask is true
     grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid, qr_level)
 
     return grid
 
