@@ -8,12 +8,6 @@ import re
 module_dir = os.path.dirname(__file__)
 os.chdir(module_dir)
 
-#Expand the limits before add \n for the numpy matrix
-np.set_printoptions(
-    threshold=np.inf,   # pas de troncature
-    linewidth=100       # lignes larges
-)
-
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
 # │                     MAKE PATTERN                        │
@@ -101,6 +95,65 @@ def add_pattern(grid, forbiden_node, int_qr_level, list_alignment_pos):
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
+# │  ERROR CODE CORRECTION ALGORITHMS (BCH & REED-SOLOMON)  │
+# │                                                         │
+# └─────────────────────────────────────────────────────────┘
+
+#Uses polynomial division over the binary finite field GF(2) to generate parity bits for BCH error-correcting codes, 
+#designed to correct random errors
+def calcul_division_BCH(data_poly, generator_poly, ecc_bits):
+
+    #Generate Error Correction
+    data_poly = np.append(data_poly, np.zeros(ecc_bits)).astype(dtype=int)
+
+    #Remove Any 0s from the Left Side
+    data_poly = remove_left_zeros(data_poly)
+    
+    while(len(data_poly) > ecc_bits):
+
+        #Pad the Generator Polynomial string on the right with 0s to make it the same length as the current format string:
+        pad_gen_poly = np.append(generator_poly, np.zeros(len(data_poly) - len(generator_poly))).astype(dtype=int)
+
+        #XOR the padded generator polynomial string with the current format string.
+        data_poly ^= pad_gen_poly
+
+        #Remove any 0s from the Left Side
+        data_poly = remove_left_zeros(data_poly)
+
+    #If the result were smaller than len(ecc_bits) bits, we would pad it on the LEFT with 0s to make it len(ecc_bits) bits long.
+    if (data_poly.size < ecc_bits):
+        data_poly = np.append(np.zeros(ecc_bits - data_poly.size, dtype=int), data_poly)
+
+    return (data_poly)
+
+def generate_reed_solomon_ecc(bit_message, data_codewords_per_block, ecc_block_size):
+    
+    log_table = np.load("utils/log_table.npy")
+
+    #Encryption Reed Solomon
+    gene_poly_exp = generate_poly(ecc_block_size, log_table)
+    data_poly_log = np.array([int(octet, 2) for octet in bit_message])
+    data_poly_exp = log_table[data_poly_log][:, 1]
+
+    #The division has been performed total number of codewords, which is the number of terms in the message polynomial
+    res = data_poly_exp
+    for i in range(data_codewords_per_block):
+        res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
+
+    #Convert Error Correction Code to log
+    #EXEPT for the log (0) stay 0
+    #In tab log, log(0) == -1
+    ecc = np.where(res == -1, 0, log_table[res][:, 0])
+
+    #If len ECC is shorter than len ECC Block Size. Complete with 0 at the end
+    if (ecc.size < ecc_block_size):
+        ecc = np.append(ecc, np.zeros(ecc_block_size - len(ecc))).astype(dtype=int)
+
+    list_ecc = [format(x, "08b") for x in ecc]
+    return (list_ecc)
+
+# ┌─────────────────────────────────────────────────────────┐
+# │                                                         │
 # │                    VERSION STRING                       │
 # │                                                         │
 # └─────────────────────────────────────────────────────────┘
@@ -137,33 +190,6 @@ def remove_left_zeros(lst):
     while i < len(lst) and lst[i] == 0:
         i += 1
     return lst[i:]
-
-#Uses polynomial division over the binary finite field GF(2) to generate parity bits for BCH error-correcting codes, 
-#designed to correct random errors
-def calcul_division_BCH(data_poly, generator_poly, ecc_bits):
-
-    #Generate Error Correction
-    data_poly = np.append(data_poly, np.zeros(ecc_bits)).astype(dtype=int)
-
-    #Remove Any 0s from the Left Side
-    data_poly = remove_left_zeros(data_poly)
-    
-    while(len(data_poly) > ecc_bits):
-
-        #Pad the Generator Polynomial string on the right with 0s to make it the same length as the current format string:
-        pad_gen_poly = np.append(generator_poly, np.zeros(len(data_poly) - len(generator_poly))).astype(dtype=int)
-
-        #XOR the padded generator polynomial string with the current format string.
-        data_poly ^= pad_gen_poly
-
-        #Remove any 0s from the Left Side
-        data_poly = remove_left_zeros(data_poly)
-
-    #If the result were smaller than len(ecc_bits) bits, we would pad it on the LEFT with 0s to make it len(ecc_bits) bits long.
-    if (data_poly.size < ecc_bits):
-        data_poly = np.append(np.zeros(ecc_bits - data_poly.size, dtype=int), data_poly)
-
-    return (data_poly)
 
 def put_format_string(grid, format_string):
 
@@ -296,6 +322,7 @@ def add_forbiden_node_alignement_pattern(forbidden, N, int_qr_level, list_alignm
 
 def add_forbiden_node_versoin_pattern(forbidden, N, int_qr_level):
 
+    #Not forbiden not for QR Code level bellow 6
     if (1 <= int_qr_level <= 6):
         return forbidden
     
@@ -304,12 +331,14 @@ def add_forbiden_node_versoin_pattern(forbidden, N, int_qr_level):
         for x in range(0, 6):
             forbidden.add((x, y))
 
+    #Top Right
     for x in range(N - 11, N - 8):
         for y in range(0, 6):
             forbidden.add((x, y))
 
     return forbidden
 
+#Create a set of nodes that must not be written to.
 def create_list_forbiden_node(int_qr_level, list_alignment_pos):
 
     N = qr_dimension(int_qr_level)
@@ -393,7 +422,7 @@ def write_data_last(grid, data, start_x, nb_line_tt,  forbiden_node):
     #Write the data to the last third left part of the QR Code
     while (start_x > 0):
         
-        grid, nb_write =  write_up_data(grid, data, start_x, nb_line_tt, forbiden_node)
+        grid, nb_write = write_up_data(grid, data, start_x, nb_line_tt, forbiden_node)
         nb_line_tt += nb_write
         start_x -= 2
 
@@ -652,13 +681,13 @@ def byte_encode(data):
 
     sanitized_data = "".join(sanitized)
 
-    # Cast la string en bytes UTF-8
+    #Cast la string en bytes UTF-8
     byte_data = sanitized_data.encode("utf-8")
 
-    # Cast chaque byte en bits
+    #Cast chaque byte en bits
     bit_message = [format(b, '08b') for b in byte_data]
 
-    return bit_message
+    return bit_message, sanitized_data
 
 def manage_data():
 
@@ -666,25 +695,23 @@ def manage_data():
     ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 
     data = input("Write something: ")
-    print("\nData: ", data)
 
     #Numeric
     if all(digit in list(NUMERIC) for digit in list(data)):
-
         bit_message = num_encode(data)
         type_data = "numeric"
         
     #Alphanumeric
     elif all(char in list(ALPHANUMERIC) for char in list(data)):
-
         bit_message = alpha_encode(data)
         type_data = "alphanumeric"
 
     #Bit
     else:
-        bit_message = byte_encode(data)
+        bit_message, data = byte_encode(data)
         type_data = "byte"
-    
+
+    print("\nData: ", repr(data))
     return bit_message, data, type_data
 
 def get_cci_bits(type_data, version):
@@ -727,7 +754,6 @@ def add_mi_cci(bit_message, data, type_data, int_qr_level):
     if type_data == "numeric":
         bit_count = format(len(data), string_nb_bit)
         bit_message.insert(0, "0001" + bit_count)
-        print(bit_message[0])
         return bit_message
 
     if type_data == "alphanumeric":
@@ -762,7 +788,7 @@ def add_terminaison(bit_message, tt_num_codeword):
     bit_message.append(add_zero * "0")
     len_bit_message += add_zero
 
-    #Add Pad Byte
+    #Add Pad Byte, If the len Bit Message is shorter than total num codeword
     s = 0
     nb_padding = (tt_num_codeword_bit - len_bit_message) // 8
     for i in range(nb_padding):
@@ -776,17 +802,17 @@ def add_terminaison(bit_message, tt_num_codeword):
 
 def convert_to_bytes(bit_message):
 
-    # Join all the bits
+    #Join all the bits
     bitstream = ''.join(bit_message)
 
-    # Split into bytes
+    #Split into bytes
     bytes_numbers = [bitstream[i:i+8] for i in range(0, len(bitstream), 8)]
     
     return bytes_numbers
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
-# │                ERROR CODE CORRECTOR                     │
+# │                     MATHEMATIQUE                        │
 # │                                                         │
 # └─────────────────────────────────────────────────────────┘
 
@@ -811,7 +837,6 @@ def multiply_polynomials(poly_1, poly_2, log_table):
     res_poly = log_table[res_poly][:, 1]
 
     return res_poly
-
 
 def generate_poly(nb_correction, log_table):
 
@@ -866,32 +891,6 @@ def polynomial_long_division(data_poly_exp, gene_poly_exp, log_table):
 
     return (data_poly_exp)
 
-def generate_reed_solomon_ecc(bit_message, data_codewords_per_block, ecc_block_size):
-    
-    log_table = np.load("utils/log_table.npy")
-
-    #Encryption Reed Solomon
-    gene_poly_exp = generate_poly(ecc_block_size, log_table)
-    data_poly_log = np.array([int(octet, 2) for octet in bit_message])
-    data_poly_exp = log_table[data_poly_log][:, 1]
-
-    #The division has been performed total number of codewords, which is the number of terms in the message polynomial
-    res = data_poly_exp
-    for i in range(data_codewords_per_block):
-        res = polynomial_long_division(res, gene_poly_exp.copy(), log_table)
-
-    #Convert Error Correction Code to log
-    #EXEPT for the log (0) stay 0
-    #In tab log, log(0) == -1
-    ecc = np.where(res == -1, 0, log_table[res][:, 0])
-
-    #If len ECC is shorter than len ECC Block Size. Complete with 0 at the end
-    if (ecc.size < ecc_block_size):
-        ecc = np.append(ecc, np.zeros(ecc_block_size - len(ecc))).astype(dtype=int)
-
-    list_ecc = [format(x, "08b") for x in ecc]
-    return (list_ecc)
-
 def manage_error_correction(bit_message, dict_ecc_info):
 
     ecc_block_size = dict_ecc_info["ec_codewords_per_block"]
@@ -900,21 +899,22 @@ def manage_error_correction(bit_message, dict_ecc_info):
     list_ecc = []
     list_data_block = []
 
-    # Découper correctement les blocs
+    #Split the Data Block
     start_index = 0
     for group_info in list_block_info:
         num_blocks = group_info["num_blocks"]
         data_codewords_per_block = group_info["data_codewords_per_block"]
 
+        #For each Block
         for _ in range(num_blocks):
             list_data_block.append(bit_message[start_index:start_index + data_codewords_per_block])
             start_index += data_codewords_per_block
-
-        # Générer l'ECC pour ce groupe
+        
+        #Generate the ECC for each group
         for i in range(num_blocks):
             list_ecc.append(generate_reed_solomon_ecc(list_data_block[-num_blocks + i], data_codewords_per_block, ecc_block_size))
 
-    # Mélanger les données interleavées
+    #Mix the intervale Data
     bit_message_out = []
     max_block_size = max(len(block) for block in list_data_block)
     for i in range(max_block_size):
@@ -922,7 +922,7 @@ def manage_error_correction(bit_message, dict_ecc_info):
             if i < len(block):
                 bit_message_out.append(block[i])
 
-    # Ajouter l'ECC interleavé
+    #Add the intervale ECC 
     for i in range(ecc_block_size):
         for ecc_block in list_ecc:
             if i < len(ecc_block):
@@ -1049,149 +1049,67 @@ def calcul_penalty(grid):
 # >>>        MASK          >>>
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-#(row + column) mod 2 == 0
-def apply_mask_0(grid, int_qr_level):
+MASK_FUNCTIONS = {
+    0: lambda i, j: (i + j) % 2 == 0,
+    1: lambda i, j: i % 2 == 0,
+    2: lambda i, j: j % 3 == 0,
+    3: lambda i, j: (i + j) % 3 == 0,
+    4: lambda i, j: (i // 2 + j // 3) % 2 == 0,
+    5: lambda i, j: ((i * j) % 2 + (i * j) % 3) == 0,
+    6: lambda i, j: ((i * j) % 2 + (i * j) % 3) % 2 == 0,
+    7: lambda i, j: ((i + j) % 2 + (i * j) % 3) % 2 == 0,
+}
 
-    # Create index i, j
-    i, j = np.indices(grid.shape)
+def get_indices(grid):
+    return np.indices(grid.shape)
 
-    # Mask where (i+j) % 2 == 0
-    mask = (i + j) % 2 == 0
+def apply_mask(grid, mask):
 
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
+    cp_grid = grid.copy()
+    cp_grid[mask] = 1 - cp_grid[mask]
 
-    return grid
-
-#(row) mod 2 == 0
-def apply_mask_1(grid, int_qr_level):
-
-    # Create index i, j
-    i, _ = np.indices(grid.shape)
-
-    # Mask where i % 2 == 0
-    mask = i % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    return grid
-
-#(column) mod 3 == 0
-def apply_mask_2(grid, int_qr_level):
-
-    # Create index i, j
-    _, j = np.indices(grid.shape)
-
-    # Mask where i % 3 == 0
-    mask = j  % 3 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    return grid
-
-#(row + column) mod 3 == 0
-def apply_mask_3(grid, int_qr_level):
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (i+j) % 3 == 0
-    mask = (i + j) % 3 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    return grid
-
-#( floor(row / 2) + floor(column / 3) ) mod 2 == 0
-def apply_mask_4(grid, int_qr_level):
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (i // 2 + j // 3) % 2 == 0
-    mask = (i // 2 + j // 3) % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    return grid
-
-#((row * column) mod 2) + ((row * column) mod 3) == 0
-def apply_mask_5(grid, int_qr_level):
-
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where ((i * j) % 2 + (i * j) % 3 ) == 0
-    mask = ((i * j) % 2 + (i * j) % 3 ) == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    return grid
-
-#( ((row * column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
-def apply_mask_6(grid, int_qr_level):
-
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (((i * j) % 2 + (i * j) % 3 ) % 2) == 0
-    mask = ((i * j) % 2 + (i * j) % 3 ) % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    return grid
-
-#( ((row + column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
-def apply_mask_7(grid, int_qr_level):
-
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (((i + j) % 2 + (i * j) % 3 ) % 2) == 0
-    mask = ((i + j) % 2 + (i * j) % 3 ) % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    return grid
+    return cp_grid
 
 def data_masking(grid, ecc_level, int_qr_level, list_alignment_pos):
 
-    list_mask_function = [apply_mask_0, apply_mask_1, apply_mask_2, apply_mask_3, apply_mask_4, apply_mask_5, apply_mask_6, apply_mask_7]
-
+    #Set the varible for the best mask
     best_mask = 0
     best_penalty = 10000
 
+    #Set the for the forbiden node
     N = qr_dimension(int_qr_level)
     forbidden = set()
     forbidden_node = add_forbiden_node_finding_pattern(forbidden, N)
 
-    for i, f in enumerate(list_mask_function):
-        cp_grid = f(grid.copy(), int_qr_level)
+    i, j = get_indices(grid)
+
+    for m in range(8):
+
+        mask = MASK_FUNCTIONS[m](i, j)
+        cp_grid = apply_mask(grid, mask)
+
+        #Add Pattern
         cp_grid = add_pattern(cp_grid, forbidden_node, int_qr_level, list_alignment_pos)
-        cp_grid = add_format_string(cp_grid, i, ecc_level)
+        cp_grid = add_format_string(cp_grid, m, ecc_level)
         cp_grid = add_version_string(cp_grid, int_qr_level)
 
+        #Calcul the penalty score
         penalty = calcul_penalty(cp_grid)
 
+        #If the score is better
         if (penalty < best_penalty):
             best_penalty = penalty
-            best_mask = i
+            best_mask = m
 
     #Return the QR Code with the best penalty
-    cp_grid = list_mask_function[best_mask](grid, int_qr_level)
+    mask = MASK_FUNCTIONS[best_mask](i, j)
+    cp_grid = apply_mask(grid.copy(), mask)
+
+    #Add Pattern
     cp_grid = add_pattern(cp_grid, forbidden_node, int_qr_level, list_alignment_pos)
     cp_grid = add_format_string(cp_grid, best_mask, ecc_level)
     cp_grid = add_version_string(cp_grid, int_qr_level)
+
     print("Mask: ", best_mask)
 
     return cp_grid
@@ -1206,13 +1124,14 @@ def import_data_json_file(ecc_level, int_qr_level):
 
     sub_folder = "utils/"
 
+    #Extract Data from Json File
     with open(sub_folder + "qr_rs_structure.json", "r") as f:
         rs = json.load(f)
 
-    ecc_info = rs["versions"][str(int_qr_level)]["error_correction"][ecc_level]
-
     with open(sub_folder +  "qr_alignment_patterns.json", "r") as f:
         alignment_positions = json.load(f)
+
+    ecc_info = rs["versions"][str(int_qr_level)]["error_correction"][ecc_level]
 
     if int_qr_level != 1:
         positions = alignment_positions[str(int_qr_level)]
@@ -1235,24 +1154,31 @@ def import_data_json_file(ecc_level, int_qr_level):
 
 def main():
 
+    #Get input from user
     bit_message, data, type_data = manage_data()
     ecc_level, int_qr_level = get_ecc_level(type_data, len(data))
+
+    #Import Data
     list_alignment_pos, dict_ecc_info = import_data_json_file(ecc_level, int_qr_level)
+
+    #Add Mode Indicator, Character Count Indicator  and Terminaison
     bit_message = add_mi_cci(bit_message, data, type_data, int_qr_level)
     bit_message = add_terminaison(bit_message, dict_ecc_info["total_data_codewords"])
+
+    #Cast to bytes
     bit_message = convert_to_bytes(bit_message)
 
-    print("Hexa:  ", [hex(int(octet, 2)) for octet in bit_message])
-    
+    #Add ECC
     bit_message = manage_error_correction(bit_message, dict_ecc_info)
     bit_message = add_remainder_bit(bit_message, int_qr_level)
 
-    print("Hexa:  ", [hex(int(octet, 2)) for octet in bit_message])
-
-    #Convertion list string to list numpy
+    #Convert List String to List Numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
     
+    #Write the Data into the QR Code
     grid = write_data(list_numpy, int_qr_level, list_alignment_pos)
+
+    #Apply the mask
     grid = data_masking(grid, ecc_level, int_qr_level, list_alignment_pos)
 
     #Change char that cannot be use to save the QR Code
@@ -1263,6 +1189,7 @@ def main():
     if len(safe_data) > max_filename_len:
         safe_data = safe_data[:max_filename_len]
 
+    #Display and save the QR Code
     plt.figure()
     plt.title(safe_data)
     plt.imshow(1 - grid, cmap='gray')
