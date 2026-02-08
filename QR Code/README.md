@@ -1,4 +1,4 @@
-# 📱 QR Code Generator – Level 1 to 6
+# 📱 QR Code Generator – Level 1 to 40
 
 This repository contains from-scratch implementations of QR Code generators, including:
 
