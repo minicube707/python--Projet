@@ -2,9 +2,13 @@
 
 This repository contains from-scratch implementations of QR Code generators, including:
 
-- QR_Code.py – Version 1 QR Codes
+- QR_Code.py – Level 1 QR Codes
+
+- QR_Code_Demo.py – Displays all calculations performed in Level 1. 
 
 - QR_Code1_6.py – QR Codes from Level 1 to 6
+
+- QR_Code1_6.py – QR Codes from Level 1 to 40  
 
 The project was developed step by step to understand the **internal structure and encoding process** of QR codes, without relying on external libraries.
 
@@ -33,11 +37,17 @@ This project focuses on:
 
 The original **QR_Code.py** supports Version 1 only, while **QR_Code1_6.py** extends support to Versions 1 through 6, making it suitable for larger data.
 
+**QR_Code1_40.py** goes even further, supporting all **QR Code Versions from 1 to 40**, allowing for very large data capacities. It also supports multiple **error correction levels**, automatically outputs QR codes to the `export/` folder
+
 ## 🛠️ Technologies Used
 
 - **Python**
 
 - **NumPy**
+
+- **Matplotlib**
+
+- **Json**
 
 - Standard Python libraries only (no QR generation packages)
 
@@ -65,13 +75,17 @@ Designed to be **clean, concise, and functional**.
 
 Extended version of `QR_Code.py` supporting **QR Code Versions 1 to 6.**
 
-This program:
+`QR_Code1_40.py`
+
+Extended version of `QR_Code.py` supporting **QR Code Versions 1 to 40.**
+
+These programs:
 
 - Handles larger data capacities
 
 - Generates QR codes of multiple levels
 
-- Outputs QR codes into the export/ folder for further use
+- Outputs QR codes into the `export/` folder for further use
 
 `QR_Code_Demo.py`
 
@@ -105,6 +119,10 @@ Contains supporting data and configuration files required by the QR code generat
 
 - `qr_rs_structure.json` – Defines the **size of error correction codewords** for different QR code configurations
 
+- `qr_rs_structure.json` – Defines the **size of error correction codewords** for different QR code configurations
+
+- `qr_alignment_patterns.json` – Defines the coordinates for placing **alignment patterns** in each QR Code version.
+
 These files allow the generator to handle QR codes properly according to the specification.
 
 ---
@@ -113,7 +131,7 @@ These files allow the generator to handle QR codes properly according to the spe
 
 This folder is where all **generated QR codes** are saved:
 
-- Each QR code is exported as an image file (PNG or SVG)
+- Each QR code is exported as an image file (PNG)
 
 - You can view all generated QR codes in this folder using any image viewer
 
@@ -149,5 +167,7 @@ This project is based on the following high-quality resources:
 - This project is **educational** and not intended to replace production-ready QR libraries
 
 - **Versions 1 to 6 QR Codes** are supported (with `QR_Code1_6.py`)
+
+- **Versions 1 to 40 QR Codes** are supported (with `QR_Code1_40.py`)
 
 - The focus is on **clarity, correctness, and understanding**, not performance
