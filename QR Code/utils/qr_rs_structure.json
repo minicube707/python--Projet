@@ -204,7 +204,7 @@
       "error_correction": {
         "L": { "total_data_codewords": 1370, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 10, "data_codewords_per_block": 114 }, { "group": 2, "num_blocks": 2, "data_codewords_per_block": 115 }] },
         "M": { "total_data_codewords": 1062, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 19, "data_codewords_per_block": 46 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 47 }] },
-        "Q": { "total_data_codewords": 754, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 28, "data_codewords_per_block": 23 }, { "group": 2, "num_blocks": 6, "data_codewords_per_block": 23 }] },
+        "Q": { "total_data_codewords": 754, "ec_codewords_per_block": 28, "blocks": [{ "group": 1, "num_blocks": 28, "data_codewords_per_block": 22 }, { "group": 2, "num_blocks": 6, "data_codewords_per_block": 23 }] },
         "H": { "total_data_codewords": 596, "ec_codewords_per_block": 30, "blocks": [{ "group": 1, "num_blocks": 33, "data_codewords_per_block": 16 }, { "group": 2, "num_blocks": 4, "data_codewords_per_block": 17 }] }
       }
     },
