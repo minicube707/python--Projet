@@ -8,7 +8,7 @@ This repository contains from-scratch implementations of QR Code generators, inc
 
 - QR_Code1_6.py – QR Codes from Level 1 to 6
 
-- QR_Code1_6.py – QR Codes from Level 1 to 40  
+- QR_Code1_40.py – QR Codes from Level 1 to 40  
 
 The project was developed step by step to understand the **internal structure and encoding process** of QR codes, without relying on external libraries.
 
