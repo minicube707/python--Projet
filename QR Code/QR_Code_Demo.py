@@ -8,10 +8,6 @@ import re
 module_dir = os.path.dirname(__file__)
 os.chdir(module_dir)
 
-#Expand the limits before add \n for the numpy matrix
-np.set_printoptions(linewidth=150)
-
-
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # >>>        UTILS         >>>
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -318,7 +314,7 @@ def get_ecc_level(type_data, len_data):
         print("Input ", ecc_level)
 
         if (ecc_level not in "LMQH0"):
-            print("Wrong input.")
+            print("\nWrong input.")
             print("Please write: 'L', 'M', 'Q', 'H' or '0' (auto-mode)")
         
         else:
@@ -332,10 +328,10 @@ def get_ecc_level(type_data, len_data):
         #Check if the data isn't longer than the lenght max for a error code correction
         max_len = rs["versions"]["1"]["capacities"][ecc_level][type_data]
         if (len_data > max_len):
-            print("Overflow Len data")
+            print("\nOverflow Len data")
             exit()
 
-        print("Level Error Code Correction: ", ecc_level)
+        print("\nLevel Error Code Correction: ", ecc_level)
         return  ecc_level
     
     #Mode auto
@@ -344,10 +340,10 @@ def get_ecc_level(type_data, len_data):
     for i in range(4):
 
         if (rs["versions"]["1"]["capacities"][list_ecc_level[i]][type_data] > len_data):
-            print("Level Error Code Correction: ", list_ecc_level[i])
+            print("\nLevel Error Code Correction: ", list_ecc_level[i])
             return list_ecc_level[i]
     
-    print("Overflow Len data")
+    print("\nOverflow Len data")
     exit()
     
 def num_encode(data):
@@ -368,7 +364,7 @@ def num_encode(data):
         else:  # len == 1
             bit_message.append(format(num, "04b"))
 
-    print("Encode Data:", bit_message)
+    print("\nEncode Data:", bit_message)
     return bit_message
 
 
@@ -393,19 +389,30 @@ def alpha_encode(data):
             num = ALPHANUMERIC.find(data[i])
             bit_message.append(format(num, "06b"))
     
-    print("Encode Data:", bit_message)
+    print("\nEncode Data:", bit_message)
     return bit_message
 
 def byte_encode(data):
 
-    bit_message = []
-    for i in range(len(data)):
+    #Replace all char non ASCII (UTF-8 > 1 byte) with space
+    sanitized = []
 
-        unicode = ord(data[i])
-        bit_message.append(format(unicode, "08b"))
+    for c in data:
+        if len(c.encode("utf-8")) == 1:
+            sanitized.append(c)
+        else:
+            sanitized.append(" ")
 
-    print("Encode Data:", bit_message)
-    return bit_message
+    sanitized_data = "".join(sanitized)
+
+    #Cast la string en bytes UTF-8
+    byte_data = sanitized_data.encode("utf-8")
+
+    #Cast chaque byte en bits
+    bit_message = [format(b, '08b') for b in byte_data]
+
+    print("\nEncode Data:", bit_message)
+    return bit_message, sanitized_data
 
 def manage_data():
 
@@ -413,9 +420,6 @@ def manage_data():
     ALPHANUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 
     data = input("Write something: ")
-
-    print("Data ", data)
-    print("")
 
     len_data = len(data)
 
@@ -429,6 +433,7 @@ def manage_data():
 
         #Add Mode Indicator & Character Count Indicator 
         bit_message.insert(0, "0001" + bit_count)
+        print("Mode Indicator: 0001")
         
     #Alphanumeric
     elif all(char in list(ALPHANUMERIC) for char in list(data)):
@@ -440,19 +445,20 @@ def manage_data():
 
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0010" + bit_count)
+        print("Mode Indicator: 0010")
 
     #Bit
     else:
         print("mode: bit")
         bit_count = format(len_data, "08b")
-        bit_message = byte_encode(data)  
+        bit_message, data = byte_encode(data)  
         type_data = "byte"
 
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0100" + bit_count)
+        print("Mode Indicator: 0100")
 
-    print("Mode Indicator: ", bit_message[0][:4])
-    print("Character Count Indicator: ", bit_message)
+    print("Character Count Indicator: ", bit_count)
     return bit_message, data, type_data
 
 def add_terminaison(bit_message, tt_num_codeword):
@@ -487,10 +493,10 @@ def add_terminaison(bit_message, tt_num_codeword):
     bit_message.append(add_zero * "0")
     len_bit_message += add_zero
     
-    print("\nMake the Lenght a Multiplr of 8")
+    print("\nMake the Lenght a Multiple of 8")
     print("Add ", add_zero * "0")
 
-    #Add Pad Byte
+    #Add Pad Byte, If the len Bit Message is shorter than total num codeword
     nb_padding = (tt_num_codeword_bit - len_bit_message) // 8
 
     print("\nComplete the remaning bytes with an alternation of 00010001 and 11101100")
@@ -680,8 +686,13 @@ def manage_error_correction(bit_message, tt_num_codeword, ecc_block_size):
     print("Octal: ", [oct(octet) for octet in ecc])
     print("Hexa:  ", [hex(octet) for octet in ecc])
 
+    #Convert ECC into bit
     list_ecc = [format(x, "08b") for x in ecc]
-    return (list_ecc)
+
+    #Add ECC to the bit message
+    bit_message.extend(list_ecc)
+
+    return (bit_message)
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -809,171 +820,64 @@ def calcul_penalty(grid):
 # >>>        MASK          >>>
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-#(row + column) mod 2 == 0
-def apply_mask_0(grid):
+MASK_FUNCTIONS = {
+    0: lambda i, j: (i + j) % 2 == 0,
+    1: lambda i, j: i % 2 == 0,
+    2: lambda i, j: j % 3 == 0,
+    3: lambda i, j: (i + j) % 3 == 0,
+    4: lambda i, j: (i // 2 + j // 3) % 2 == 0,
+    5: lambda i, j: ((i * j) % 2 + (i * j) % 3) == 0,
+    6: lambda i, j: ((i * j) % 2 + (i * j) % 3) % 2 == 0,
+    7: lambda i, j: ((i + j) % 2 + (i * j) % 3) % 2 == 0,
+}
 
-    # Create index i, j
-    i, j = np.indices(grid.shape)
+def get_indices(grid):
+    return np.indices(grid.shape)
 
-    # Mask where (i+j) % 2 == 0
-    mask = (i + j) % 2 == 0
+def apply_mask(grid, mask):
 
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
+    cp_grid = grid.copy()
+    cp_grid[mask] = 1 - cp_grid[mask]
 
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
-
-#(row) mod 2 == 0
-def apply_mask_1(grid):
-
-    # Create index i, j
-    i, _ = np.indices(grid.shape)
-
-    # Mask where i % 2 == 0
-    mask = i % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
-
-#(column) mod 3 == 0
-def apply_mask_2(grid):
-
-    # Create index i, j
-    _, j = np.indices(grid.shape)
-
-    # Mask where i % 3 == 0
-    mask = j  % 3 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
-
-#(row + column) mod 3 == 0
-def apply_mask_3(grid):
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (i+j) % 3 == 0
-    mask = (i + j) % 3 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
-
-#( floor(row / 2) + floor(column / 3) ) mod 2 == 0
-def apply_mask_4(grid):
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (i // 2 + j // 3) % 2 == 0
-    mask = (i // 2 + j // 3) % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
-
-#((row * column) mod 2) + ((row * column) mod 3) == 0
-def apply_mask_5(grid):
-
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where ((i * j) % 2 + (i * j) % 3 ) == 0
-    mask = ((i * j) % 2 + (i * j) % 3 ) == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
-
-#( ((row * column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
-def apply_mask_6(grid):
-
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (((i * j) % 2 + (i * j) % 3 ) % 2) == 0
-    mask = ((i * j) % 2 + (i * j) % 3 ) % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
-
-#( ((row + column) mod 2) + ((row * column) mod 3) ) mod 2 == 0
-def apply_mask_7(grid):
-
-
-    # Create index i, j
-    i, j = np.indices(grid.shape)
-
-    # Mask where (((i + j) % 2 + (i * j) % 3 ) % 2) == 0
-    mask = ((i + j) % 2 + (i * j) % 3 ) % 2 == 0
-
-    # Flip bits where mask is true
-    grid[mask] = 1 - grid[mask]
-
-    #Add pattern
-    grid = add_pattern(grid)
-
-    return grid
+    return cp_grid
 
 def data_masking(grid, ecc_level):
 
-    list_mask_function = [apply_mask_0, apply_mask_1, apply_mask_2, apply_mask_3, apply_mask_4, apply_mask_5, apply_mask_6, apply_mask_7]
-
+    #Set the varible for the best mask
     best_mask = 0
     best_penalty = 10000
 
-    for i, f in enumerate(list_mask_function):
-        print("\nEval Mask N°", i)
+    i, j = get_indices(grid)
 
-        cp_grid = f(grid.copy())
+    for m in range(8):
+        print("\nEval Mask N°", m)
+
+        mask = MASK_FUNCTIONS[m](i, j)
+        cp_grid = apply_mask(grid, mask)
+
+        #Add Pattern
         cp_grid = add_pattern(cp_grid)
-        cp_grid = add_format_string(cp_grid, i, ecc_level)
+        cp_grid = add_format_string(cp_grid, m, ecc_level)
 
+        #Calcul the penalty score
         penalty = calcul_penalty(cp_grid)
 
+        #If the score is better
         if (penalty < best_penalty):
             best_penalty = penalty
-            best_mask = i
-    
-    print("\nBest Mask is ", best_mask, " Mask with ", best_penalty, " score")
+            best_mask = m
 
+    print("\nBest Mask is ", best_mask, " Mask with ", best_penalty, " score")
+    
     #Return the QR Code with the best penalty
-    cp_grid = list_mask_function[best_mask](grid)
+    mask = MASK_FUNCTIONS[best_mask](i, j)
+    cp_grid = apply_mask(grid.copy(), mask)
+
+    #Add Pattern
     cp_grid = add_pattern(cp_grid)
     cp_grid = add_format_string(cp_grid, best_mask, ecc_level)
+
+    print("Mask: ", best_mask)
 
     return cp_grid
 
@@ -1006,13 +910,21 @@ def get_rs_structure(ecc_level):
 
 def main():
 
+    #Get input from user
     print_flag("Encode Data")
     bit_message, data, type_data = manage_data()
     ecc_level = get_ecc_level(type_data, len(data))
+    
+    #Import Data
     tt_num_codeword, ecc_block_size, data_codewords_per_block = get_rs_structure(ecc_level)
+    
+    #Add Terminaison
     bit_message = add_terminaison(bit_message, tt_num_codeword)
+   
+    #Cast to bytes
     bit_message = convert_to_bytes(bit_message)
 
+    #Add ECC
     print_flag("DATA ANALYSIS & DATA ENCODING")
     bit_message = manage_error_correction(bit_message, data_codewords_per_block, ecc_block_size)
     
@@ -1024,16 +936,23 @@ def main():
     #Convertion list string to list numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
     
+    #Write the Data into the QR Code
     grid = write_data(list_numpy)
 
+    #Apply the mask
     print_flag("DATA MASKING")
     grid = data_masking(grid, ecc_level)
     
     #Change char that cannot be use to save the QR Cod
     safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
     
+    #Trunc if too long
+    max_filename_len = 50
+    if len(safe_data) > max_filename_len:
+        safe_data = safe_data[:max_filename_len]
+
     plt.figure()
-    plt.title(data)
+    plt.title(safe_data)
     plt.imshow(1 - grid, cmap='gray')
     plt.axis("off")
     plt.savefig("export/" + safe_data + ".png")
