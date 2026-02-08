@@ -9,7 +9,10 @@ module_dir = os.path.dirname(__file__)
 os.chdir(module_dir)
 
 #Expand the limits before add \n for the numpy matrix
-np.set_printoptions(linewidth=150)
+np.set_printoptions(
+    threshold=np.inf,   # pas de troncature
+    linewidth=100       # lignes larges
+)
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -325,20 +328,6 @@ def create_list_forbiden_node(int_qr_level, list_alignment_pos):
 # │                                                         │
 # └─────────────────────────────────────────────────────────┘
 
-def write_pair_data(grid, data1, data2, index_x, index_y, forbiden_node):
-
-    nb_write = 0
-
-    if (index_y, index_x) not in forbiden_node:
-        grid[index_y, index_x] = data1
-        nb_write += 1
-
-    if (index_y, index_x - 1) not in forbiden_node:
-        grid[index_y, index_x - 1] = data2
-        nb_write += 1
-
-    return grid, nb_write
-
 def write_up_data(grid, data, start_x, index_data, forbiden_node):
 
     nb_write = 0
@@ -350,11 +339,11 @@ def write_up_data(grid, data, start_x, index_data, forbiden_node):
         if (index_y < 0):
             return grid, nb_write
         
-        if (index_y, index_x) not in forbiden_node:
+        if (index_x, index_y) not in forbiden_node:
             grid[index_y, index_x] = data[index_data + nb_write]
             nb_write += 1
 
-        if (index_y, index_x - 1) not in forbiden_node:
+        if (index_x - 1, index_y) not in forbiden_node:
             grid[index_y, index_x - 1] = data[index_data + nb_write]
             nb_write += 1
 
@@ -389,7 +378,7 @@ def write_data_first(grid, data, forbiden_node):
     #Write the data to the first two third middle part of the QR Code
     while (start_x > 10):
 
-        grid, nb_write = write_up_data(grid, data , start_x, nb_line_tt, forbiden_node)
+        grid, nb_write = write_up_data(grid, data, start_x, nb_line_tt, forbiden_node)
         nb_line_tt += nb_write
         start_x -= 2
 
@@ -651,13 +640,24 @@ def alpha_encode(data):
     return bit_message
 
 def byte_encode(data):
-    
-    #Cast the string in bytes UTF-8
-    byte_data = data.encode('utf-8')
 
-    #Cast each bytes in bit
+    #Replace all char non ASCII (UTF-8 > 1 byte) with space
+    sanitized = []
+
+    for c in data:
+        if len(c.encode("utf-8")) == 1:
+            sanitized.append(c)
+        else:
+            sanitized.append(" ")
+
+    sanitized_data = "".join(sanitized)
+
+    # Cast la string en bytes UTF-8
+    byte_data = sanitized_data.encode("utf-8")
+
+    # Cast chaque byte en bits
     bit_message = [format(b, '08b') for b in byte_data]
-    
+
     return bit_message
 
 def manage_data():
@@ -684,29 +684,60 @@ def manage_data():
     else:
         bit_message = byte_encode(data)
         type_data = "byte"
-
+    
     return bit_message, data, type_data
+
+def get_cci_bits(type_data, version):
+
+    if type_data == "numeric":
+        if version <= 9: 
+            return "010b"
+        elif version <= 26: 
+            return "012b"
+        else: 
+            return "014b"
+
+    elif type_data == "alphanumeric":
+        if version <= 9: 
+            return "09b"
+        elif version <= 26:
+            return "011b"
+        else: 
+            return "013b"
+
+    elif type_data == "byte":
+        if version <= 9: 
+            return "08b"
+        else: 
+            return "016b"
+
+    elif type_data == "kanji":
+        if version <= 9: 
+            return "08b"
+        elif version <= 26: 
+            return "010b"
+        else: 
+            return "012b"
 
 #Add Mode Indicator & Character Count Indicator 
 def add_mi_cci(bit_message, data, type_data, int_qr_level):
 
+    string_nb_bit = get_cci_bits(type_data, int_qr_level)
+    
     if type_data == "numeric":
-        bit_count = format(len(bit_message), "010b")
+        bit_count = format(len(data), string_nb_bit)
         bit_message.insert(0, "0001" + bit_count)
+        print(bit_message[0])
         return bit_message
 
     if type_data == "alphanumeric":
-        bit_count = format(len(bit_message), "09b")
+        bit_count = format(len(data), string_nb_bit)
         bit_message.insert(0, "0010" + bit_count)
         return bit_message
     
     if type_data == "byte":
-        if int_qr_level < 10 and len(data) < 256:
-            bit_count = format(len(bit_message), "08b")
-        else:
-            bit_count = format(len(bit_message), "016b")
+        bit_count = format(len(data), string_nb_bit)
         bit_message.insert(0, "0100" + bit_count)
-        
         return bit_message
     
 def add_terminaison(bit_message, tt_num_codeword):
@@ -730,15 +761,17 @@ def add_terminaison(bit_message, tt_num_codeword):
     add_zero = (8 - len_bit_message % 8) % 8
     bit_message.append(add_zero * "0")
     len_bit_message += add_zero
-    
+
     #Add Pad Byte
+    s = 0
     nb_padding = (tt_num_codeword_bit - len_bit_message) // 8
     for i in range(nb_padding):
         if (i % 2):
             bit_message.append("00010001")
         else:
             bit_message.append("11101100")
-  
+        s += 8
+
     return bit_message
 
 def convert_to_bytes(bit_message):
@@ -748,7 +781,7 @@ def convert_to_bytes(bit_message):
 
     # Split into bytes
     bytes_numbers = [bitstream[i:i+8] for i in range(0, len(bitstream), 8)]
-
+    
     return bytes_numbers
 
 # ┌─────────────────────────────────────────────────────────┐
@@ -861,54 +894,41 @@ def generate_reed_solomon_ecc(bit_message, data_codewords_per_block, ecc_block_s
 
 def manage_error_correction(bit_message, dict_ecc_info):
 
-    #Get Data form the Dict
     ecc_block_size = dict_ecc_info["ec_codewords_per_block"]
     list_block_info = dict_ecc_info["block_info"]
-    
+
     list_ecc = []
     list_data_block = []
 
-    #If there is 2 groups
-    if (len(list_block_info) == 2):
-        size_block_data_group1 = list_block_info[0]["data_codewords_per_block"]
-    
-    #If there is only one group
-    else:
-        size_block_data_group1 = 0
+    # Découper correctement les blocs
+    start_index = 0
+    for group_info in list_block_info:
+        num_blocks = group_info["num_blocks"]
+        data_codewords_per_block = group_info["data_codewords_per_block"]
 
-    #For each block
-    for k in range(len(list_block_info)):
-        
-        #Get the info from the block
-        num_blocks = list_block_info[k]["num_blocks"]
-        data_codewords_per_block = list_block_info[k]["data_codewords_per_block"]
+        for _ in range(num_blocks):
+            list_data_block.append(bit_message[start_index:start_index + data_codewords_per_block])
+            start_index += data_codewords_per_block
 
-        #Create list of Data Block
+        # Générer l'ECC pour ce groupe
         for i in range(num_blocks):
-            list_data_block.append(bit_message[(data_codewords_per_block * i) + (k * 2 * size_block_data_group1): data_codewords_per_block * (i + 1) + (k * 2 *size_block_data_group1)])
+            list_ecc.append(generate_reed_solomon_ecc(list_data_block[-num_blocks + i], data_codewords_per_block, ecc_block_size))
 
-        #Create list of Error Code Corrector
-        for i in range(num_blocks):
-            list_ecc.append(generate_reed_solomon_ecc(list_data_block[i + k * len(list_block_info)], data_codewords_per_block, ecc_block_size))
-    
-    #Create the bit message
-    bit_message = []
-    for j in range(data_codewords_per_block):
-        for k in range(len(list_block_info)):
-            for i in range(num_blocks):
-                
-                #Check if we are not in out of range
-                if (j < len(list_data_block[i + k * len(list_block_info)])):
-                    bit_message.append(list_data_block[i + k * len(list_block_info)][j])
+    # Mélanger les données interleavées
+    bit_message_out = []
+    max_block_size = max(len(block) for block in list_data_block)
+    for i in range(max_block_size):
+        for block in list_data_block:
+            if i < len(block):
+                bit_message_out.append(block[i])
 
-    #Add the ECC
-    for j in range(ecc_block_size):
-        for k in range(len(list_block_info)):
-            for i in range(num_blocks):
+    # Ajouter l'ECC interleavé
+    for i in range(ecc_block_size):
+        for ecc_block in list_ecc:
+            if i < len(ecc_block):
+                bit_message_out.append(ecc_block[i])
 
-                bit_message.append(list_ecc[i + k * len(list_block_info)][j])
-
-    return bit_message
+    return bit_message_out
 
 # ┌─────────────────────────────────────────────────────────┐
 # │                                                         │
@@ -1216,17 +1236,22 @@ def import_data_json_file(ecc_level, int_qr_level):
 def main():
 
     bit_message, data, type_data = manage_data()
-    ecc_level, int_qr_level = get_ecc_level(type_data, len(bit_message))
+    ecc_level, int_qr_level = get_ecc_level(type_data, len(data))
     list_alignment_pos, dict_ecc_info = import_data_json_file(ecc_level, int_qr_level)
     bit_message = add_mi_cci(bit_message, data, type_data, int_qr_level)
     bit_message = add_terminaison(bit_message, dict_ecc_info["total_data_codewords"])
     bit_message = convert_to_bytes(bit_message)
+
+    print("Hexa:  ", [hex(int(octet, 2)) for octet in bit_message])
+    
     bit_message = manage_error_correction(bit_message, dict_ecc_info)
     bit_message = add_remainder_bit(bit_message, int_qr_level)
 
+    print("Hexa:  ", [hex(int(octet, 2)) for octet in bit_message])
+
     #Convertion list string to list numpy
     list_numpy = np.array([int(bit) for byte in bit_message for bit in byte], dtype=np.uint8)
-
+    
     grid = write_data(list_numpy, int_qr_level, list_alignment_pos)
     grid = data_masking(grid, ecc_level, int_qr_level, list_alignment_pos)
 
@@ -1239,7 +1264,7 @@ def main():
         safe_data = safe_data[:max_filename_len]
 
     plt.figure()
-    plt.title(data)
+    plt.title(safe_data)
     plt.imshow(1 - grid, cmap='gray')
     plt.axis("off")
     plt.savefig("export/" + safe_data + ".png")
