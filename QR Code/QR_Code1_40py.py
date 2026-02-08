@@ -789,14 +789,12 @@ def add_terminaison(bit_message, tt_num_codeword):
     len_bit_message += add_zero
 
     #Add Pad Byte, If the len Bit Message is shorter than total num codeword
-    s = 0
     nb_padding = (tt_num_codeword_bit - len_bit_message) // 8
     for i in range(nb_padding):
         if (i % 2):
             bit_message.append("00010001")
         else:
             bit_message.append("11101100")
-        s += 8
 
     return bit_message
 
