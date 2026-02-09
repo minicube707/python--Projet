@@ -519,24 +519,18 @@ def alpha_encode(data):
 
 def byte_encode(data):
 
-    #Replace all char non ASCII (UTF-8 > 1 byte) with space
-    sanitized = []
-
-    for c in data:
-        if len(c.encode("utf-8")) == 1:
-            sanitized.append(c)
-        else:
-            sanitized.append(" ")
-
-    sanitized_data = "".join(sanitized)
-
     #Cast la string en bytes UTF-8
-    byte_data = sanitized_data.encode("utf-8")
+    byte_data = data.encode("utf-8")
 
     #Cast chaque byte en bits
     bit_message = [format(b, '08b') for b in byte_data]
 
-    return bit_message, sanitized_data
+    return bit_message
+
+#Return the len of the data in UTF-8 bytes
+def get_len_data(data):
+
+    return (len(byte_encode(data)))
 
 def manage_data():
 
@@ -545,7 +539,7 @@ def manage_data():
 
     data = input("Write something: ")
 
-    len_data = len(data)
+    len_data = get_len_data(data)
 
     #Numeric
     if all(digit in list(NUMERIC) for digit in list(data)):
@@ -570,14 +564,14 @@ def manage_data():
     #Bit
     else:
         bit_count = format(len_data, "08b")
-        bit_message, data = byte_encode(data) 
+        bit_message = byte_encode(data) 
         type_data = "byte"
 
         #Add Mode Indicator & Character Count Indicator
         bit_message.insert(0, "0100" + bit_count)
 
     print("\nData: ", repr(data))
-    return bit_message, data, type_data
+    return bit_message, data, type_data, len_data
 
 def add_terminaison(bit_message, tt_num_codeword):
 
@@ -974,8 +968,8 @@ def get_rs_structure(ecc_level, qr_level):
 def main():
 
     #Get input from user
-    bit_message, data, type_data = manage_data()
-    ecc_level, int_qr_level = get_ecc_level(type_data, len(data))
+    bit_message, data, type_data, len_data = manage_data()
+    ecc_level, int_qr_level = get_ecc_level(type_data, len_data)
 
     #Import Data
     dict_ecc_info = get_rs_structure(ecc_level, int_qr_level)
