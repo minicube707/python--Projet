@@ -1172,8 +1172,6 @@ def main():
 
     #Apply the mask
     grid = data_masking(grid, ecc_level, int_qr_level, list_alignment_pos)
-
-    data = "Voici Otis mon Scribe"
     
     #Change char that cannot be use to save the QR Code
     safe_data = re.sub(r'[^a-zA-Z0-9_-]', '_', data)
