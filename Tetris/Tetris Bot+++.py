@@ -5,10 +5,9 @@ import numpy as np
 import time
 import os
 
-
 pygame.init()
 
-# Crée une fenêtre de 800x600 pixels
+# Crée une fenêtre de 1550x800 pixels
 WIDTH, HEIGHT = 1550, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -358,12 +357,33 @@ def draw(WIN, HEIGHT, rows, cols, cell_size, x_offset, y_offset, all_figure, lis
 #Draw the grid
 def draw_grid(win, rows, cols, cell_size, x_offset, y_offset):
 
-    # Dessiner la grille
-    for row in range(rows):
-        for col in range(cols):
-            x = x_offset + col * cell_size
-            y = y_offset + row * cell_size
-            pygame.draw.rect(win, WHITE, (x, y, cell_size, cell_size), 1)
+    # Total grid dimensions
+    grid_width = cols * cell_size
+    grid_height = rows * cell_size
+
+    # Draw vertical lines
+    for col in range(cols + 1):
+        x = x_offset + col * cell_size
+
+        pygame.draw.line(
+            win,
+            WHITE,
+            (x, y_offset),
+            (x, y_offset + grid_height),
+            1
+        )
+
+    # Draw horizontal lines
+    for row in range(rows + 1):
+        y = y_offset + row * cell_size
+
+        pygame.draw.line(
+            win,
+            WHITE,
+            (x_offset, y),
+            (x_offset + grid_width, y),
+            1
+        )
 
 
 #Draw the next figure         
